@@ -1,7 +1,7 @@
 CC=riscv64-unknown-elf-gcc
 CFLAGS=-ffreestanding -nostartfiles -nostdlib -nodefaultlibs
 CFLAGS+=-g -Wl,--gc-sections -mcmodel=medany -march=rv64g
-CFLAGS+=-Wl,--no-warn-rwx-segments
+#CFLAGS+=-Wl,--no-warn-rwx-segments
 RUNTIME=boot.S
 LINKER_SCRIPT=kernel.ld
 KERNEL_IMAGE=kernel.elf
