@@ -2,9 +2,11 @@ OUTPUT_ARCH( "riscv" )
 
 ENTRY( _start )
 
+OUTPUT(kernel.elf)
+
 MEMORY
 {
-  ram  (wxa) : ORIGIN = 0x80000000, LENGTH = 128M
+  ram  (rwxa) : ORIGIN = 0x80000000, LENGTH = 128M
 }
 
 PHDRS
@@ -46,10 +48,10 @@ SECTIONS
 
 
   PROVIDE(_memory_start = ORIGIN(ram));
- /* PROVIDE(_memory_end = ORIGIN(ram) + LENGTH(ram));
+  PROVIDE(_memory_end = ORIGIN(ram) + LENGTH(ram));
   PROVIDE(_heap_end = _memory_end - 4096);
   PROVIDE(_heap_counter = _heap_end + 8);
 
   PROVIDE(_vga_framebuffer = 0x50000000);
-  PROVIDE(_vga_mmio = 0x40000000);*/
+  PROVIDE(_vga_mmio = 0x40000000);
 }

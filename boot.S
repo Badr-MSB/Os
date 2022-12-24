@@ -1,27 +1,12 @@
-.option norvc
+.option norvc 
+.align 4
+/*
+.half 16
+.word 32
+.dword 64
+*/
 
-.section .data 
-
-welcome: .ascii  "Welcome \0"
-iamhart: .ascii  "I am HART \0"
-givingupcontrol: .ascii "Giving Up Control\0"
-newline: .ascii  "\n\0"
-machinemode: .ascii  "Mode: Machine \0"
-interrupts_status: .ascii  "Interrupts: "
-space: .ascii " \0"
-
-_hartlock:
-    .skip 8,0
-
-#small memory for temp values
-_scratchpad:
-    .skip 1024,0
-
-_stacks:
-    .skip 8192,0
-
-.section .text.init
-.global _start
+.bss 
 
 .macro push reg
     sd \reg, 0(sp)
@@ -33,173 +18,214 @@ _stacks:
     add sp, sp, t0
     ld \reg, 0(sp)
 .endm
+
+.section .data
+
+hello: .ascii "Welcome bro !\0"
+newline: .ascii "\n\0"
+welcome_machine: .ascii "Welcome to machine mode\0"
+welcome_supervisor: .ascii "Welcome to supervisor mode\0"
+welcome_user: .ascii "Welcome to user mode"
+
+supervisor_trap: .ascii "Supervisor warning\0"
+machine_trap: .ascii "Machine warning\0"
+
+hextable: .ascii  "0123456789ABCDEF\0"
+
+walkingpagetables: .ascii "Walking Page Tables...\0"
+endwalkingpagetables: .ascii "Walking Page Tables Complete\0"
+
+_scrachpad: .skip 1024,0
+
+.align 12
+_stacks: .skip 8192,0
+
+.section .text.init
+.global _start 
+
 _start:
     csrr t0, mhartid
-    la t1, _stacks
+    call _init_system
+    bnez t0, _wfi
+
+    la a0, hello
+    call kputs
+
+    la t0, _machine_trap
+    csrw mtvec, t0
+
+    la t0, _supervisor_trap
+    csrw stvec, t0
+
+   
+
+    li t0, 0xFFFFFFFF
+	csrw pmpaddr0,t0
+	li t0, 0x1F
+	csrw pmpcfg0,t0
+
+    csrr t1, mstatus
+    li t0, 0xFFFFE7FF
+    and t1, t0, t1
+    li t0, 0x800
+    or t1, t1, t0
+    csrw mstatus, t1
+    
+    li t0, 0x00000001
+    slli t0, t0, 7
+    and t0, t1, t0
+    srai t0, t0, 6
+    csrr t1, mstatus
+    or t1, t1, t0
+    csrw mstatus, t1
+    
+/*
+    la t0, _supervisor_mode_entry
+    csrw sepc, t0
+    sret*/
+/*
+    call _setup_satp
+
+    la a0, _data_start
+
+    la a0, _data_start
+	la a1, _data_start
+	li a2, 0x07
+	call _map_to_virtual
+
+    la a0, _stacks
+	la a1, _stacks
+	li a2, 0x0F
+	call _map_to_virtual
+*/
+    #UART Port
+  
+    li a0, 0x10000000
+	li a1, 0x10000000
+	li a2, 0x0F
+	call _map_to_virtual 
+/*
+    # Identity Map the Uart Functions  (F)
+	la a0, _write_uart
+	la a1, _write_uart
+	li a2, 0x0F
+	call _map_to_virtual
+
+    # writeln
+    la a0, _writeln
+	la a1, _writeln
+	li a2, 0x0F
+	call _map_to_virtual*/
+
+
+
+	# Virtual Map the Example Page (F)
+	la a0, _example_page
+	la a1, _example_page
+	li a2, 0x0F
+	call _map_to_virtual
+
+	la a0, walkingpagetables
+	call kputs
+
+	# Print out All Page Tables
+	la a0, _page_table_start
+	li a1, 2
+	call _walk_page_tables
+
+	la a0, endwalkingpagetables
+	call kputs
+
+	la t0, _example_page
+	csrw mepc,t0
+	mret
+    
+/*
+    la t0, _supervisor_mode_entry
+    csrw sepc, t0
+    sret*/
+
+    wfi
+
+.include "paging.S"
+.include "uart.S"
+_init_system:
+    #init stack
+    la a0, _stacks
+    csrr t0, mhartid
     li t2, 1024
-    mul t3, t2, t0
-    add sp, t1, t3
-
-	bnez t0, _announce
-
-	call _setup_uart
-	la a0, welcome
-	call _writeln
-
-    call _debug_misa
-
-    call _sanity_check
-    j _announce
-	wfi
-
-_writeln:
-	push ra
-	call _write_uart
-	la a0, newline
-	call _write_uart
-	pop ra
-	ret
-
-_writespace:
-	push ra
-	call _write_uart
-	la a0, space
-	call _write_uart
-	pop ra
-	ret
-_setup_uart:
-    # Disable interrupts
+    mul t1, t0, t2
+    add sp, t1, a0
+    #init UART
+    #call uart_init
+    
+    #1 Disable interrupts
     li t1, 0x10000001
     sb x0, 0(t1)
 
-    # set the output to 8 bits, no parity, one stop bit
+    #2 set the output to 8 bits, no parity, one stop bit
     li t1, 0x10000003
     li t2, 0x03
     sb t2, 0(t1)
     ret
 
-_write_uart:
-    push ra
-_write_uart_loop:
-    li t1, 0x10000005
-    lb t2, 0(t1)
-    li t3, 0x20
-    and t2, t3, t1
-    beqz t1, _write_uart_loop 
-    # write in the output 
-    li t1, 0x10000000
-    lb t2, 0(a0)
-    beqz t2, _write_uart_end
-    sb t2, 0(t1)
-    li t2, 1
-    add a0, t2, a0
-    j _write_uart_loop
 
-_write_uart_end:
-    pop ra
-    ret
- 
-_sanity_check:
-    push ra
-    csrr t0, mstatus
-    li t1, 0xC00
-    and t0, t1, t2
-    beq t1, t2, _sanity_check_interrupts
-    la a0, machinemode
-    call _writeln
-
-_sanity_check_interrupts:
-    csrr t0, mstatus
-    li t1, 0x8
-    and t0, t1, t0
-    la a0, interrupts_status
-    call _write_uart
-
-    li t3, 0x30 
-    srai t2, t2, 3
-    and t1, t0 , t3
-
-    la a0, _scratchpad
-
-    sb t1, 0(a0)
-    call _writeln
-
-_sanity_check_end:
-    pop ra
-    ret
-
-_announce:
-	fence
-	la t0, _hartlock
-	lw t0, 0(t0)
-	csrr t1, mhartid
-	bne t0, t1, _announce
-	# Write I am HART...
-	la a0, iamhart
-	call _write_uart
-	# Add 0x30 to the HART ID to get ASCII Number
-	csrr t1, mhartid
-	li t2, 0x30
-	add t1, t2, t1
-	# Loading our Scratchpad RAM into a0
-	la a0, _scratchpad
-	# Store ASCII Hart ID into scratchpad
-	sb t1, 0(a0)
-	call _writeln
-	# Increment the HART lock
-	csrr t0, mhartid
-	li t1, 0x01
-	add t1, t0, t1
-	la t2, _hartlock
-	sw t1, 0(t2)
-	la t0, _hartlock
-	lw t1, 0(t0)
-	fence
-
-	j _wait
-
-_debug_misa:
-    push ra
-	csrr t0, misa
-	# Number of Extensions to Check
-	li t1, 26
-	# Counter
-	li t2, 0
-	# Mask
-	li t3, 1
-	_debug_misa_extension_start:
-	and t4, t0, t3
-	beqz t4, _debug_misa_extension_inc
-
-	# Load ASCII 'A' into T4
-	li t4, 0x41
-	add t4, t4, t2
-
-	# Loading our Scratchpad RAM into a0
-	la a0, _scratchpad
-	# Store ASCII Extension Value
-	sb t4, 0(a0)
-	push t0
-	push t1
-	push t2
-	push t3
-	call _writespace
-	pop t3
-	pop t2
-	pop t1
-	pop t0
-
-
-
-	_debug_misa_extension_inc:
-	srai t0, t0, 1
-	add t2, t2, t3	
-	bne t1, t2, _debug_misa_extension_start
-
-	la a0, newline
-	call _write_uart
-	pop ra
-    ret
-
-_wait:
+_supervisor_mode_entry:
+    la a0, welcome_supervisor
+    call kputs
     wfi
+
+_supervisor_trap:
+    la a0, supervisor_trap
+    call kputs
+    li t0, 0x30
+    csrr t1, scause
+    add t0, t0, t1
+    la a0, _scrachpad
+    sb t0, 0(a0)
+    call kputs
+    sret
+
+_machine_trap:
+    la a0, machine_trap
+    call kputs
+    li t0, 0x30
+    csrr t1, mcause
+    add t0, t0, t1
+    la a0, _scrachpad
+    sb t0, 0(a0)
+    call kputs
+    mret
+
+_wfi:
+    wfi
+
+
+
+_kalloc:
+	la a1, _heap_counter
+	ld t0, 0(a1)
+
+	li t1, 1
+	add t0, t0, t1
+	sd t0, 0(a1)
+
+	la t1, _heap_end
+	li t2, 4096
+	mul t2, t0, t2
+	sub a0, t1, t2
+	ret
+
+.align 12
+_example_page:
+	la a0, welcome_supervisor
+	call kputs
+	la a0, _page_table_start
+	ld a0, 0(a0)
+	wfi
+	.skip 4096
+
+.align 12
+_page_table_start:
+# Sv39 page tables contain 2^9 Page Table Entries
+	.skip 4096
