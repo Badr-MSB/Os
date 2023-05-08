@@ -39,7 +39,7 @@ void id_map_range(struct page_table *root, size_t start, size_t end,
 }
 */
 void kmain(void) {
-  //uart_init();
+  uart_init();
   //page_init();
   //kmem_init();
 

@@ -1,13 +1,7 @@
 .option norvc 
 .align 4
-/*
-.half 16
-.word 32
-.dword 64
-*/
 
 .bss 
-
 .macro push reg
     sd \reg, 0(sp)
     li t0, 8
@@ -41,6 +35,9 @@ _scrachpad: .skip 1024,0
 _stacks: .skip 8192,0
 
 .section .text.init
+
+.global kputs
+
 .global _start 
 
 _start:
@@ -50,9 +47,10 @@ _start:
 
     la a0, hello
     call kputs
-
+/*
     la t0, _machine_trap
     csrw mtvec, t0
+    */
 
     la t0, _supervisor_trap
     csrw stvec, t0
@@ -83,10 +81,8 @@ _start:
     la t0, _supervisor_mode_entry
     csrw sepc, t0
     sret*/
-/*
-    call _setup_satp
 
-    la a0, _data_start
+    call _setup_satp
 
     la a0, _data_start
 	la a1, _data_start
@@ -97,26 +93,26 @@ _start:
 	la a1, _stacks
 	li a2, 0x0F
 	call _map_to_virtual
-*/
+
     #UART Port
   
     li a0, 0x10000000
 	li a1, 0x10000000
 	li a2, 0x0F
 	call _map_to_virtual 
-/*
+
     # Identity Map the Uart Functions  (F)
 	la a0, _write_uart
 	la a1, _write_uart
 	li a2, 0x0F
 	call _map_to_virtual
-
+/*
     # writeln
-    la a0, _writeln
-	la a1, _writeln
+    la a0, kputs
+	la a1, kputs
 	li a2, 0x0F
-	call _map_to_virtual*/
-
+	call _map_to_virtual
+*/
 
 
 	# Virtual Map the Example Page (F)
@@ -139,16 +135,12 @@ _start:
 	la t0, _example_page
 	csrw mepc,t0
 	mret
-    
-/*
-    la t0, _supervisor_mode_entry
-    csrw sepc, t0
-    sret*/
 
     wfi
 
 .include "paging.S"
-.include "uart.S"
+.include "uart0.S"
+
 _init_system:
     #init stack
     la a0, _stacks
@@ -157,8 +149,6 @@ _init_system:
     mul t1, t0, t2
     add sp, t1, a0
     #init UART
-    #call uart_init
-    
     #1 Disable interrupts
     li t1, 0x10000001
     sb x0, 0(t1)
@@ -171,8 +161,10 @@ _init_system:
 
 
 _supervisor_mode_entry:
+    push a0
     la a0, welcome_supervisor
     call kputs
+    pop a0
     wfi
 
 _supervisor_trap:
@@ -199,8 +191,6 @@ _machine_trap:
 
 _wfi:
     wfi
-
-
 
 _kalloc:
 	la a1, _heap_counter

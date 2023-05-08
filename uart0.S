@@ -15,6 +15,7 @@ _write_uart_char:
 .align 12
 # Write a string to UART
 # a0 should contain a pointer to the string we want to print...
+
 _write_uart:
 	push ra
 _write_uart_loop:
@@ -35,12 +36,11 @@ _write_uart_loop:
 _write_uart_end:
 	pop ra
 	ret
-    
+ 
 _print_hex:
 	push ra
 	# 64 bit value  = 8 bytes = 16 nibbles
 	li a1, 15
-
 _print_hex_loop:
 	# Load Mask into T1
 	li t4, 4
