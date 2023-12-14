@@ -1,0 +1,4 @@
+Memory Paging
+correcting Memory protection
+User application linker
+Multi tasking
