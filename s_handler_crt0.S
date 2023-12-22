@@ -5,10 +5,11 @@ _s_ct_switch:
     li t2, (1 << 63)
     or t1, t1 , t2
     and t0 , t0 , t1
-    #bne t0,t1 , _sret
+    bne t0,t1 , _sret
 
     la a0, s_context_switch_msg
     call print
+
 
     push x1
     push x2
@@ -27,8 +28,40 @@ _s_ct_switch:
     push x15
     push x16
     # ...
+    push x17
+    push x18
+    push x19
+    push x20
+    push x21
+    push x22
+    push x23 
+    push x24
+    push x25
+    push x26
+    push x27
+    push x28
+    push x29
+    push x30
+    push x31
+  
     call timer_handler
-    # ...
+    
+    pop x31
+    pop x30
+    pop x29
+    pop x28
+    pop x27
+    pop x26
+    pop x25
+    pop x24
+    pop x23 
+    pop x22
+    pop x21
+    pop x20
+    pop x19
+    pop x18
+    pop x17
+    #...
     pop x16
     pop x15
     pop x14
@@ -47,5 +80,6 @@ _s_ct_switch:
     pop x1
  
     sret # pc <- mepc , disable mask 
+    
 _sret:
     sret

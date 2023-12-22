@@ -8,15 +8,18 @@ KERNEL_IMAGE=kernel.elf
 
 # QEMU
 QEMU=qemu-system-riscv64
-MACH=virt -nographic -cpu rv64 -smp 1 -m 128M  -serial mon:stdio #time_lo=0x02 time_hi=0x00bff8
+MACH=virt -nographic -cpu rv64 -smp 1 -m 2048M -serial mon:stdio
 RUN=$(QEMU) -device VGA -machine $(MACH)
 RUN+=-bios none -kernel $(KERNEL_IMAGE) 
 
 # Format
 INDENT_FLAGS=-linux -brf -i2
 
-all: uart handler main 
-	$(CC) build/*.o $(RUNTIME) $(CFLAGS) -T $(LINKER_SCRIPT) -o $(KERNEL_IMAGE)
+all: uart handler main boot
+	$(CC) build/*.o $(CFLAGS) -T $(LINKER_SCRIPT) -o $(KERNEL_IMAGE) -Wl,-Map=program.map
+
+boot: boot.S 
+	$(CC) $(RUNTIME) -c $(CFLAGS) -o build/boot.o
 
 uart: uart.h
 	$(CC) -c uart.c $(CFLAGS) -o build/uart.o

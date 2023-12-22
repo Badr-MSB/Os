@@ -2,13 +2,11 @@ OUTPUT_ARCH( "riscv" )
 
 ENTRY( _start )
 
-ENTRY(_start)
-
 OUTPUT(kernel.elf)
 
 MEMORY
 {
-  ram  (rwxa) : ORIGIN = 0x80000000, LENGTH = 128M
+  ram  (rwxa) : ORIGIN = 0x80000000, LENGTH =1024M
 }
 
 PHDRS
@@ -20,7 +18,7 @@ PHDRS
 
 SECTIONS
 {
-  /* . = 0x80100000; */
+  . = 0x80000000;
   .text : {
     PROVIDE(_text_start = .);
     *(.text.init) *(.text .text.*)

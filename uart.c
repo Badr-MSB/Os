@@ -8,9 +8,9 @@ void uart_init()
     volatile uint8_t *ptr = (uint8_t *)0x10000000;
     ptr[1] = 0;
     // Set word length to 8 (LCR[1:0])
-    const uint8_t LCR = 0b11;
-    ptr[3] = 0b11;
-    print("============================|=> initialisation =|========================> \n");
+    const uint8_t LCR = 0x11;
+    ptr[3] = 0x11;
+    print("||============================|=> initialisation =|========================> \n");
 }
 
 int putChar(char c)
@@ -28,7 +28,7 @@ void putint(int i)
 }
 char intTochar(int i)
 {
-    return '/' + i + 1;
+    return ('/' + i) + 1;
 }
 void printInt(int a)
 {

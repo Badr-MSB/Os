@@ -7,6 +7,6 @@
 void kmain()
 {
     uart_init();
-    // config stvec here
+
     print("Hi , it's Supervisor Badr !\n");
 }

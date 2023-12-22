@@ -1,13 +1,13 @@
 #include "handler.h"
 #include "csr_registers.h"
 
-int roundNumer = 1;
+uint64_t roundNumer = 0x0;
 
 extern int printf(const char *, ...);
 
 void timer_handler()
 {
-    printf("printer %d\n", roundNumer);
+    printf("Timer interrupt handled [%d] times \n", roundNumer);
     roundNumer++;
-    set_mtimecmp(roundNumer * 0x1800000);
+    set_mtimecmp(roundNumer * 0x00018000);
 }
