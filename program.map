@@ -94,17 +94,25 @@ LOAD build/vprintf.o
                 [!provide]                        PROVIDE (_text_end = .)
                 [!provide]                        PROVIDE (_global_pointer = .)
 
-.rodata         0x0000000080001220      0x147
+.bss            0x0000000080001220        0x8
+                [!provide]                        PROVIDE (_bss_start = .)
+ *(.sbss .sbss.*)
+ .sbss          0x0000000080001220        0x8 build/handler.o
+                0x0000000080001220                roundNumer
+ *(.bss .bss.*)
+                [!provide]                        PROVIDE (_bss_end = .)
+
+.rodata         0x0000000080001228      0x147
                 [!provide]                        PROVIDE (_rodata_start = .)
  *(.rodata .rodata.*)
- .rodata        0x0000000080001220       0x56 build/boot.o
- *fill*         0x0000000080001276        0x2 
- .rodata        0x0000000080001278       0x25 build/handler.o
- *fill*         0x000000008000129d        0x3 
- .rodata        0x00000000800012a0       0x1d build/main.o
- *fill*         0x00000000800012bd        0x3 
- .rodata        0x00000000800012c0       0x58 build/sprintf.o
- .rodata        0x0000000080001318       0x4f build/uart.o
+ .rodata        0x0000000080001228       0x56 build/boot.o
+ *fill*         0x000000008000127e        0x2 
+ .rodata        0x0000000080001280       0x25 build/handler.o
+ *fill*         0x00000000800012a5        0x3 
+ .rodata        0x00000000800012a8       0x1d build/main.o
+ *fill*         0x00000000800012c5        0x3 
+ .rodata        0x00000000800012c8       0x58 build/sprintf.o
+ .rodata        0x0000000080001320       0x4f build/uart.o
                 [!provide]                        PROVIDE (_rodata_end = .)
 
 .data           0x0000000080001370     0x1890
@@ -117,14 +125,6 @@ LOAD build/vprintf.o
                 0x0000000080002000                _scrachpad
                 0x0000000080002400                _stacks
                 [!provide]                        PROVIDE (_data_end = .)
-
-.bss            0x0000000080002c00        0x8
-                [!provide]                        PROVIDE (_bss_start = .)
- *(.sbss .sbss.*)
- .sbss          0x0000000080002c00        0x8 build/handler.o
-                0x0000000080002c00                roundNumer
- *(.bss .bss.*)
-                [!provide]                        PROVIDE (_bss_end = .)
                 [!provide]                        PROVIDE (_memory_start = ORIGIN (ram))
                 [!provide]                        PROVIDE (_memory_end = (ORIGIN (ram) + LENGTH (ram)))
                 [!provide]                        PROVIDE (_heap_end = (_memory_end - 0x1000))

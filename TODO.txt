@@ -1,3 +1,4 @@
+Include heap in the linker file
 Memory Paging
 correcting Memory protection
 User application linker
