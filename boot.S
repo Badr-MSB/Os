@@ -24,9 +24,13 @@ s_context_switch_msg: .ascii "S-Mode Switching Context\n\0"
 .equ MTIME, 0x0200bff8
 
 .section .data
-.align 8
-_scrachpad: .skip 1024,0
-_stacks: .skip 2048,0
+    .align 4
+    .globl _scrachpad
+    _scrachpad: .skip 1024,0
+
+    .align 4
+    .globl _stacks
+    _stacks: .skip 2048,0
 
 .section .text.init
 
@@ -92,14 +96,15 @@ _start:
     # #delegating timer interrupt to S-Mode
     # # li      t0, 0x20
     # # csrs    mideleg, t0
+
     #Setting mtime to 0
     la t0, MTIME
     li t1, 0
     sd t1,0(t0)
    
     # setting mtimecmp
-    la t0, MTIMECMP
-    li t1, 0x00018000
+    la t0, MTIMECMP 
+    li t1, 10000000
     sd t1, 0(t0)
 
     
@@ -109,6 +114,7 @@ _start:
     
 _wfi:
     wfi
+    j _wfi
 
 .include "m_handler_crt0.S"
 .include "s_handler_crt0.S"  

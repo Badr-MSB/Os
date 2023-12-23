@@ -1,7 +1,7 @@
 #ifndef _HANDLER_H_
 #define _HANDLER_H_
 
-#include "uart.h"
+#include "Uart/uart.h"
 
 #define CLINT_MTIME 0x0200bff8
 #define CLINT_MTIMECMP 0x02004000
@@ -9,6 +9,8 @@
 #define CLINT_STIMECMP 0xc008
 #define CLINT_UTIME 0xd000
 #define CLINT_UTIMECMP 0xd008
+
+#define RTC_FREQUENCY 10000000 // 10 MHz cycle each ~= 40 ns
 
 #define set_mtimecmp(value)                                \
     ({                                                     \

@@ -8,6 +8,7 @@ extern int printf(const char *, ...);
 void timer_handler()
 {
     printf("Timer interrupt handled [%d] times \n", roundNumer);
+    // printf("Delay choosen is %d second");
     roundNumer++;
-    set_mtimecmp(roundNumer * 0x00018000);
+    set_mtimecmp(roundNumer * RTC_FREQUENCY);
 }

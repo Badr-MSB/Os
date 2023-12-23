@@ -1,2 +1,4 @@
 build/*
 kernel.elf
+objdump.txt
+program.map

@@ -10,7 +10,7 @@ KERNEL_IMAGE=kernel.elf
 QEMU=qemu-system-riscv64
 MACH=virt -nographic -cpu rv64 -smp 1 -m 2048M -serial mon:stdio
 RUN=$(QEMU) -device VGA -machine $(MACH)
-RUN+=-bios none -kernel $(KERNEL_IMAGE) 
+RUN+=-bios none -kernel $(KERNEL_IMAGE) -rtc base=localtime -k fr
 
 # Format
 INDENT_FLAGS=-linux -brf -i2
@@ -21,8 +21,8 @@ all: uart handler main boot
 boot: boot.S 
 	$(CC) $(RUNTIME) -c $(CFLAGS) -o build/boot.o
 
-uart: uart.h
-	$(CC) -c uart.c $(CFLAGS) -o build/uart.o
+uart: Uart/uart.h
+	$(CC) -c Uart/uart.c $(CFLAGS) -o build/uart.o
 
 handler:
 	$(CC) -c handler.c $(CFLAGS) -o build/handler.o

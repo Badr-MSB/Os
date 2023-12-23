@@ -46,9 +46,10 @@ _m_ct_switch:
     push x30
     push x31
     # # ...
+    #li a0, 1
     call timer_handler
     # # ...
-   pop x31
+    pop x31
     pop x30
     pop x29
     pop x28

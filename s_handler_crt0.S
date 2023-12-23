@@ -1,4 +1,3 @@
-
 _s_ct_switch:
     csrr t0, scause
     li t1, 5
@@ -79,7 +78,7 @@ _s_ct_switch:
     pop x2
     pop x1
  
-    sret # pc <- mepc , disable mask 
+    sret # pc <- sepc , disable mask 
     
 _sret:
     sret

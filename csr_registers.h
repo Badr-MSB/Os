@@ -48,9 +48,14 @@ static inline void wfi()
                              : "memory");
 }
 
+// __builtin_unreachable is used to :
+// Remove dead code (that programmer knows will never be executed)
+// Linearize the code by letting compiler know that the path is "cold" (similar effect is achieved by calling noreturn function)
+
 __attribute__((noreturn)) static inline void mret()
 {
     __asm__ __volatile__("mret");
     __builtin_unreachable();
 }
+
 #endif

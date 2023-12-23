@@ -65,32 +65,32 @@ LOAD build/uart.o
 LOAD build/vprintf.o
                 0x0000000080000000                . = 0x80000000
 
-.text           0x0000000080000000     0x121c
+.text           0x0000000080000000     0x1220
                 [!provide]                        PROVIDE (_text_start = .)
  *(.text.init)
- .text.init     0x0000000080000000      0x6e4 build/boot.o
+ .text.init     0x0000000080000000      0x6ec build/boot.o
                 0x0000000080000000                _start
  *(.text .text.*)
- .text          0x00000000800006e4       0x80 build/handler.o
-                0x00000000800006e4                timer_handler
- .text          0x0000000080000764       0x34 build/main.o
-                0x0000000080000764                kmain
- .text          0x0000000080000798       0x78 build/printf.o
-                0x0000000080000798                printf
- .text          0x0000000080000810      0x75c build/sprintf.o
-                0x0000000080000810                vsnprintf
-                0x0000000080000e2c                vsprintf
-                0x0000000080000e78                sprintf
-                0x0000000080000ef0                snprintf
- .text          0x0000000080000f6c      0x200 build/uart.o
-                0x0000000080000f6c                uart_init
-                0x0000000080000fc8                putChar
-                0x0000000080001004                putint
-                0x000000008000105c                intTochar
-                0x0000000080001090                printInt
-                0x0000000080001114                print
- .text          0x000000008000116c       0xb0 build/vprintf.o
-                0x000000008000116c                vprintf
+ .text          0x00000000800006ec       0x7c build/handler.o
+                0x00000000800006ec                timer_handler
+ .text          0x0000000080000768       0x34 build/main.o
+                0x0000000080000768                kmain
+ .text          0x000000008000079c       0x78 build/printf.o
+                0x000000008000079c                printf
+ .text          0x0000000080000814      0x75c build/sprintf.o
+                0x0000000080000814                vsnprintf
+                0x0000000080000e30                vsprintf
+                0x0000000080000e7c                sprintf
+                0x0000000080000ef4                snprintf
+ .text          0x0000000080000f70      0x200 build/uart.o
+                0x0000000080000f70                uart_init
+                0x0000000080000fcc                putChar
+                0x0000000080001008                putint
+                0x0000000080001060                intTochar
+                0x0000000080001094                printInt
+                0x0000000080001118                print
+ .text          0x0000000080001170       0xb0 build/vprintf.o
+                0x0000000080001170                vprintf
                 [!provide]                        PROVIDE (_text_end = .)
                 [!provide]                        PROVIDE (_global_pointer = .)
 
@@ -107,13 +107,15 @@ LOAD build/vprintf.o
  .rodata        0x0000000080001318       0x4f build/uart.o
                 [!provide]                        PROVIDE (_rodata_end = .)
 
-.data           0x0000000080001400     0x1800
+.data           0x0000000080001370     0x1890
                 0x0000000080002000                . = ALIGN (0x1000)
- *fill*         0x0000000080001400      0xc00 
+ *fill*         0x0000000080001370      0xc90 
                 [!provide]                        PROVIDE (_data_start = .)
  *(.sdata .sdata.*)
  *(.data .data.*)
  .data          0x0000000080002000      0xc00 build/boot.o
+                0x0000000080002000                _scrachpad
+                0x0000000080002400                _stacks
                 [!provide]                        PROVIDE (_data_end = .)
 
 .bss            0x0000000080002c00        0x8
@@ -155,36 +157,36 @@ OUTPUT(kernel.elf elf64-littleriscv)
  .comment       0x000000000000001b       0x1c build/uart.o
  .comment       0x000000000000001b       0x1c build/vprintf.o
 
-.debug_line     0x0000000000000000      0xe3a
- .debug_line    0x0000000000000000      0x492 build/boot.o
- .debug_line    0x0000000000000492       0x73 build/handler.o
- .debug_line    0x0000000000000505       0x65 build/main.o
- .debug_line    0x000000000000056a       0x88 build/printf.o
- .debug_line    0x00000000000005f2      0x640 build/sprintf.o
- .debug_line    0x0000000000000c32      0x163 build/uart.o
- .debug_line    0x0000000000000d95       0xa5 build/vprintf.o
+.debug_line     0x0000000000000000      0xe48
+ .debug_line    0x0000000000000000      0x498 build/boot.o
+ .debug_line    0x0000000000000498       0x73 build/handler.o
+ .debug_line    0x000000000000050b       0x69 build/main.o
+ .debug_line    0x0000000000000574       0x88 build/printf.o
+ .debug_line    0x00000000000005fc      0x640 build/sprintf.o
+ .debug_line    0x0000000000000c3c      0x167 build/uart.o
+ .debug_line    0x0000000000000da3       0xa5 build/vprintf.o
 
 .debug_line_str
-                0x0000000000000000      0x131
+                0x0000000000000000      0x13b
  .debug_line_str
                 0x0000000000000000       0x3f build/boot.o
  .debug_line_str
                 0x000000000000003f       0x4d build/handler.o
                                          0x8d (size before relaxing)
  .debug_line_str
-                0x000000000000008c        0xe build/main.o
-                                         0x48 (size before relaxing)
+                0x000000000000008c       0x13 build/main.o
+                                         0x4d (size before relaxing)
  .debug_line_str
-                0x000000000000009a       0x67 build/printf.o
+                0x000000000000009f       0x67 build/printf.o
                                          0xc9 (size before relaxing)
  .debug_line_str
-                0x0000000000000101       0x19 build/sprintf.o
+                0x0000000000000106       0x19 build/sprintf.o
                                          0xa6 (size before relaxing)
  .debug_line_str
-                0x000000000000011a        0x7 build/uart.o
-                                         0x84 (size before relaxing)
+                0x000000000000011f        0xc build/uart.o
+                                         0x8e (size before relaxing)
  .debug_line_str
-                0x0000000000000121       0x10 build/vprintf.o
+                0x000000000000012b       0x10 build/vprintf.o
                                          0xd5 (size before relaxing)
 
 .debug_info     0x0000000000000000      0x99c

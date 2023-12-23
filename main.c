@@ -1,7 +1,7 @@
 #include <stdint.h>
 #include <stddef.h>
 
-#include "uart.h"
+#include "Uart/uart.h"
 #include "csr_registers.h"
 
 void kmain()
