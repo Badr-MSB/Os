@@ -4,12 +4,12 @@
 
 for Qemu virt :
 
-      Device        |   address                 |    size
-____________________________________________________________
-CLINT Base Adress   |     0x200000              |   0x10000
-CLINT MSIP          | 0x200000 + 4 * hartid     |     4     
-CLINT mtimecmp      |   0x204000 + 8 * hartId   |     8
-CLINT mtime         |     0x0200bff8            |     8
+| Device              |   address               |    size   |
+|---------------------|-------------------------|-----------|
+| CLINT Base Adress   |     0x200000            |  0x10000  |
+| CLINT MSIP          | 0x200000 + 4 * hartid   |     4     |
+| CLINT mtimecmp      |   0x204000 + 8 * hartId |     8     |
+| CLINT mtime         |     0x0200bff8          |     8     |
 
 the mtime can be readed by using the pseudo-instruction rdtime
 
