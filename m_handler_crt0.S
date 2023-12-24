@@ -13,7 +13,7 @@ _m_ct_switch:
     # li      t0, 0x20
     # csrs    mip, t0
     
-        push x1
+    push x1
     push x2
     push x3
     push x4
@@ -46,7 +46,7 @@ _m_ct_switch:
     push x30
     push x31
     # # ...
-    #li a0, 1
+
     call timer_handler
     # # ...
     pop x31

@@ -2,7 +2,7 @@ CC=riscv64-unknown-elf-gcc
 CFLAGS=-ffreestanding -nostartfiles -nostdlib -nodefaultlibs
 CFLAGS+=-g -Wl,--gc-sections -mcmodel=medany -march=rv64g
 CFLAGS+=-Wl,--no-warn-rwx-segments
-RUNTIME=boot.S 
+RUNTIME=ctr0.S 
 LINKER_SCRIPT=kernel.ld
 KERNEL_IMAGE=kernel.elf
 
@@ -15,17 +15,23 @@ RUN+=-bios none -kernel $(KERNEL_IMAGE) -rtc base=localtime -k fr
 # Format
 INDENT_FLAGS=-linux -brf -i2
 
-all: uart handler main boot
+all: uart handler main boot virt_plic boot_start
 	$(CC) build/*.o $(CFLAGS) -T $(LINKER_SCRIPT) -o $(KERNEL_IMAGE) -Wl,-Map=program.map
 
-boot: boot.S 
+boot:
 	$(CC) $(RUNTIME) -c $(CFLAGS) -o build/boot.o
+
+boot_start: boot.c
+	$(CC) -c boot.c $(CFLAGS) -o build/boot_start.o
 
 uart: Uart/uart.h
 	$(CC) -c Uart/uart.c $(CFLAGS) -o build/uart.o
 
 handler:
 	$(CC) -c handler.c $(CFLAGS) -o build/handler.o
+
+virt_plic: virt_plic.h
+	$(CC) -c virt_plic.c $(CFLAGS) -o build/virt_plic.o
 main:
 	$(CC) -c main.c $(CFLAGS) -o build/main.o
 

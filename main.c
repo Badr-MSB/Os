@@ -3,6 +3,7 @@
 
 #include "Uart/uart.h"
 #include "csr_registers.h"
+#include "virt_plic.h"
 
 void kmain()
 {

@@ -48,11 +48,6 @@ _start:
 
     bnez t0, _wfi
     
-    li a0, -1                                      # Allow access to all memory
-    csrw pmpaddr0 , a0
-
-    li a0 , (0x18 | 0x04 | 0x02 | 0x01)
-    csrw pmpcfg0 , a0
 
     csrw satp, x0                                # Disable address translation.
 
@@ -64,11 +59,8 @@ _start:
     csrr t0, mhartid
     bnez t0, _wfi
    
-    # la a0, 0x00000008                                     # test Mem access
+    # la a0, 0x00000008                            # test Mem access
     # call print
-    
-    li   t0, (1 << 11)                             # Supervisor mode.
-    csrs mstatus, t0
 
     csrw mie, zero                                 # desable interrupt
 
@@ -82,20 +74,26 @@ _start:
     la t0 , _m_ct_switch
     csrw mtvec, t0
 
-    # la t0, _s_ct_switch
-    # csrw stvec, t0
+    la t0, _s_ct_switch
+    csrw stvec, t0
 
-    li      t0, 0x00000082
+    li      t0, 0x00000482  #Enabling PMP mode, enabling SIE & previous interrupt enable
     csrrs   x0, mstatus, t0
+
+    li a0, -1                                      # Allow access to all memory
+    csrw pmpaddr0 , a0
+
+    li a0 , (0x18 | 0x04 | 0x02 | 0x01)
+    csrw pmpcfg0 , a0
 
     # # timer interrupts (M and S mode)
     # # + machine level external interrupts (it will be usefull for keyboard and mouse interrrupts) 
     li t0, 0x000008a0
     csrrs x0, mie, t0
 
-    # #delegating timer interrupt to S-Mode
-    # # li      t0, 0x20
-    # # csrs    mideleg, t0
+    #delegating timer interrupt to S-Mode
+    li      t0, 0x20
+    csrs    mideleg, t0
 
     #Setting mtime to 0
     la t0, MTIME
@@ -104,13 +102,13 @@ _start:
    
     # setting mtimecmp
     la t0, MTIMECMP 
-    li t1, 10000000
+    li t1, 20000000
     sd t1, 0(t0)
 
-    
+    j boot_start
     # If kmain returns, wfi
-    la   ra,_wfi
-    mret
+    #la   ra,_wfi
+    #mret
     
 _wfi:
     wfi
