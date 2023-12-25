@@ -15,8 +15,9 @@ RUN+=-bios none -kernel $(KERNEL_IMAGE) -rtc base=localtime -k fr
 # Format
 INDENT_FLAGS=-linux -brf -i2
 
-all: uart handler main boot virt_plic boot_start
+all: uart handler main boot virt_plic boot_start mcause 
 	$(CC) build/*.o $(CFLAGS) -T $(LINKER_SCRIPT) -o $(KERNEL_IMAGE) -Wl,-Map=program.map
+
 
 boot:
 	$(CC) $(RUNTIME) -c $(CFLAGS) -o build/boot.o
@@ -24,14 +25,18 @@ boot:
 boot_start: boot.c
 	$(CC) -c boot.c $(CFLAGS) -o build/boot_start.o
 
-uart: Uart/uart.h
-	$(CC) -c Uart/uart.c $(CFLAGS) -o build/uart.o
+uart: uart/uart.h uart/uart.c
+	$(CC) -c uart/uart.c $(CFLAGS) -o build/uart.o
+
+mcause: tools/mcause.h
+	$(CC) -c tools/mcause.c $(CFLAGS) -o build/mcause.o
 
 handler:
 	$(CC) -c handler.c $(CFLAGS) -o build/handler.o
 
-virt_plic: virt_plic.h
-	$(CC) -c virt_plic.c $(CFLAGS) -o build/virt_plic.o
+virt_plic: plic/virt_plic.h
+	$(CC) -c plic/virt_plic.c $(CFLAGS) -o build/virt_plic.o
+
 main:
 	$(CC) -c main.c $(CFLAGS) -o build/main.o
 

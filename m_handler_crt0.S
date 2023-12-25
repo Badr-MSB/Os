@@ -1,3 +1,4 @@
+.align 4
 _m_ct_switch:
 
     csrr t0, mcause
@@ -7,12 +8,11 @@ _m_ct_switch:
     and t0 , t0 , t1
     bne t0,t1 , _mret
 
+    call display_trap_cause
+
     la a0, m_context_switch_msg
     call printf
-    
-    # li      t0, 0x20
-    # csrs    mip, t0
-    
+  
     push x1
     push x2
     push x3

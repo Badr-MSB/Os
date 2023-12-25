@@ -13,6 +13,17 @@ For Qemu virt :
 
 the mtime can be readed by using the pseudo-instruction rdtime
 
+## Timer Interupt à la RISC-V
+
+The machine mode timer interrupt is generated when:
+- mie in mstatus in enabled
+- MTIE in mie is enabled
+- mtime > mtimecmp
+
+## Software Interrupt
+
+[Comming Soon]
+
 ## PLIC
 **PLIC**, stands for Platform Level Interrupt Controller, is a programmable interrupt controller used for external interrupts. 
 
@@ -35,5 +46,6 @@ In the multicore sys, the read operation returns the interrupting device id for 
 |---------------------|-------------------------|-------------------------------|
 | PLIC                |   0xc000000             |0x2000 + 0x1000 * NumberOfHarts|
 
+## APLIC
 
-## Timer Interupt
+[Comming Soon]

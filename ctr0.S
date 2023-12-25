@@ -14,6 +14,15 @@
     ld \reg, 0(sp)
 .endm
 
+.macro get_privilege_mode reg
+    csrr \reg, mstatus
+    li t0, MSTATUS_MPP_MASK
+    li t1, MSTATUS_MPP_SHIFT
+    srl \reg, \reg, t1
+    and \reg, \reg, t0
+.endm
+
+
 .section .rodata
 hello: .ascii "Shalom\n\0"
 message: .ascii "Salam, it's machine mode\n\0" 
@@ -22,7 +31,12 @@ s_context_switch_msg: .ascii "S-Mode Switching Context\n\0"
 
 .equ MTIMECMP, 0x2004000
 .equ MTIME, 0x0200bff8
-
+.equ MSTATUS_MPP_MASK ,0x0000000F
+.equ MSTATUS_MPP_SHIFT, 11
+.equ MSTATUS_SPP_MASK ,0x00000008
+.equ MSTATUS_MIE_MASK ,0x00000008
+.equ MSTATUS_SPIE_MASK, 0x00000020
+.equ MSTATUS_UIE_MASK ,0x00000010
 .section .data
     .align 4
     .globl _scrachpad

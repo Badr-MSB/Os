@@ -1,6 +1,6 @@
 #include "handler.h"
 #include "clint.h"
-#include "Uart/uart.h"
+#include "uart/uart.h"
 
 uint64_t roundNumer = 0x0;
 

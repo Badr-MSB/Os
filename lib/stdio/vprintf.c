@@ -4,7 +4,7 @@
 #include <stddef.h>
 #include <stdarg.h>
 
-extern int print(char *str);
+extern void print(char *str);
 
 #define alloca(sz) __builtin_alloca(sz)
 

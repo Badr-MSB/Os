@@ -4,7 +4,7 @@
 #include "stdint.h"
 #include "string.h"
 
-extern int print(char *);
+extern void print(char *);
 
 int puts(const char *s)
 {

@@ -4,7 +4,7 @@
 #include <stddef.h>
 #include <stdarg.h>
 
-int printf(const char* s, ...)
+int printf(const char *s, ...)
 {
     int res = 0;
     va_list vl;
