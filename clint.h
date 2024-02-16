@@ -3,8 +3,8 @@
 
 #define CLINT_MTIME 0x0200bff8
 #define CLINT_MTIMECMP 0x02004000
-// #define CLINT_STIME 0xc000
-// #define CLINT_STIMECMP 0xc008
+#define CLINT_STIME 0xc000
+#define CLINT_STIMECMP 0xc008
 #define CLINT_UTIME 0xd000
 #define CLINT_UTIMECMP 0xd008
 

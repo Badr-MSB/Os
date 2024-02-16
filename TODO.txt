@@ -1,2 +1,3 @@
 READ mcause & scause
 PLIC config for Keyboard and Mouse
+send the os to panic when exception occurs

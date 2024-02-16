@@ -8,16 +8,15 @@ KERNEL_IMAGE=kernel.elf
 
 # QEMU
 QEMU=qemu-system-riscv64
-MACH=virt -nographic -cpu rv64 -smp 1 -m 2048M -serial mon:stdio
+MACH= virt -nographic -cpu rv64 -smp 1 -m 1G -serial mon:stdio
 RUN=$(QEMU) -device VGA -machine $(MACH)
 RUN+=-bios none -kernel $(KERNEL_IMAGE) -rtc base=localtime -k fr
 
 # Format
 INDENT_FLAGS=-linux -brf -i2
 
-all: uart handler main boot virt_plic boot_start mcause 
+all: uart handler main boot virt_plic boot_start mcause mstatus
 	$(CC) build/*.o $(CFLAGS) -T $(LINKER_SCRIPT) -o $(KERNEL_IMAGE) -Wl,-Map=program.map
-
 
 boot:
 	$(CC) $(RUNTIME) -c $(CFLAGS) -o build/boot.o
@@ -25,11 +24,14 @@ boot:
 boot_start: boot.c
 	$(CC) -c boot.c $(CFLAGS) -o build/boot_start.o
 
-uart: uart/uart.h uart/uart.c
+uart: uart/uart.h
 	$(CC) -c uart/uart.c $(CFLAGS) -o build/uart.o
 
 mcause: tools/mcause.h
 	$(CC) -c tools/mcause.c $(CFLAGS) -o build/mcause.o
+
+mstatus: tools/mstatus.h
+	$(CC) -c tools/mstatus.c $(CFLAGS) -o build/mstatus.o
 
 handler:
 	$(CC) -c handler.c $(CFLAGS) -o build/handler.o

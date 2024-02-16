@@ -1,5 +1,8 @@
+
 .align 4
 _m_ct_switch:
+
+    call display_trap_cause
 
     csrr t0, mcause
     li t1, 7

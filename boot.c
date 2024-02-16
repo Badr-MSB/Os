@@ -3,5 +3,5 @@
 void boot_start()
 {
     // plic_desable(0, 0, 10);
-    asm volatile("mret");
+    // asm volatile("mret");
 }

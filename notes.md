@@ -1,4 +1,4 @@
-## CLINT in Qemu Virt
+# CLINT in Qemu Virt
 
 **CLINT**, stand for Core Local interrupt, used for Software and timer interrupts (internal)
 
@@ -24,10 +24,10 @@ The machine mode timer interrupt is generated when:
 
 [Comming Soon]
 
-## PLIC
+# PLIC
 **PLIC**, stands for Platform Level Interrupt Controller, is a programmable interrupt controller used for external interrupts. 
 
-# How it works
+## How it works
 When a device is seeking for attention :
 - Source interrupt pending bit (in the **PLIC**) is set to 1.
 - All enable cores, for this particular interrupt, are notified.
@@ -45,6 +45,9 @@ In the multicore sys, the read operation returns the interrupting device id for 
 | Device              |   address               |    size                       |
 |---------------------|-------------------------|-------------------------------|
 | PLIC                |   0xc000000             |0x2000 + 0x1000 * NumberOfHarts|
+
+
+for more informations : https://github.com/riscv/riscv-plic-spec/blob/master/riscv-plic.adoc
 
 ## APLIC
 

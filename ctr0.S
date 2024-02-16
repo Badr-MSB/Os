@@ -1,5 +1,5 @@
 .option norvc 
-.align 4
+.align 8
 
 .bss 
 .macro push reg
@@ -14,18 +14,9 @@
     ld \reg, 0(sp)
 .endm
 
-.macro get_privilege_mode reg
-    csrr \reg, mstatus
-    li t0, MSTATUS_MPP_MASK
-    li t1, MSTATUS_MPP_SHIFT
-    srl \reg, \reg, t1
-    and \reg, \reg, t0
-.endm
-
-
 .section .rodata
 hello: .ascii "Shalom\n\0"
-message: .ascii "Salam, it's machine mode\n\0" 
+message: .ascii "Salam, it's me\n\0" 
 m_context_switch_msg: .ascii "M-Mode Switching Context\n\0"
 s_context_switch_msg: .ascii "S-Mode Switching Context\n\0"
 
@@ -37,6 +28,7 @@ s_context_switch_msg: .ascii "S-Mode Switching Context\n\0"
 .equ MSTATUS_MIE_MASK ,0x00000008
 .equ MSTATUS_SPIE_MASK, 0x00000020
 .equ MSTATUS_UIE_MASK ,0x00000010
+
 .section .data
     .align 4
     .globl _scrachpad
@@ -53,6 +45,13 @@ s_context_switch_msg: .ascii "S-Mode Switching Context\n\0"
 
 _start:
 
+    #config interrupt processing
+    la t0 , _m_ct_switch
+    csrw mtvec, t0
+
+    la t0, _s_ct_switch
+    csrw stvec, t0
+
     #Set up stack // 4 hart sp -> *******
     csrr t0, mhartid
     la a0, _stacks
@@ -60,21 +59,20 @@ _start:
     mul t1, t0, t2
     add sp, t1, a0
 
+    #send all harts to wait for interruption except hart 0
+    csrr t0, mhartid
     bnez t0, _wfi
-    
+
+    call display_current_mode                    # current mode
+
+    li    t0, 0x00000820  #Enabling PMP mode, enabling SIE & previous interrupt enable + defining S-mode as MPP
+    csrs  mstatus, t0
+    call  dispaly_mstatus
 
     csrw satp, x0                                # Disable address translation.
 
     la a0, message
     call print
-
-
-    #send all harts to wait for interruption except hart 0
-    csrr t0, mhartid
-    bnez t0, _wfi
-   
-    # la a0, 0x00000008                            # test Mem access
-    # call print
 
     csrw mie, zero                                 # desable interrupt
 
@@ -84,17 +82,7 @@ _start:
     la t0, kmain
     csrw mepc, t0
 
-    #config interrupt processing
-    la t0 , _m_ct_switch
-    csrw mtvec, t0
-
-    la t0, _s_ct_switch
-    csrw stvec, t0
-
-    li      t0, 0x00000482  #Enabling PMP mode, enabling SIE & previous interrupt enable
-    csrrs   x0, mstatus, t0
-
-    li a0, -1                                      # Allow access to all memory
+    li a0, -1                                     # Allow access to all memory
     csrw pmpaddr0 , a0
 
     li a0 , (0x18 | 0x04 | 0x02 | 0x01)
@@ -119,10 +107,10 @@ _start:
     li t1, 20000000
     sd t1, 0(t0)
 
-    j boot_start
+    #jalr boot_start
     # If kmain returns, wfi
-    #la   ra,_wfi
-    #mret
+    la   ra,_wfi
+    mret
     
 _wfi:
     wfi

@@ -2,7 +2,7 @@
 
 void plic_set_priority(uint8_t interruptId, char priority)
 {
-    uint32_t *address = (uint32_t *)VIRT_PLIC_INTERRUPT_PRIORITY_ADDR(interruptId);
+    uint32_t *address = (uint32_t *)(VIRT_PLIC_INTERRUPT_PRIORITY_ADDR(interruptId));
     *address = priority & 0x7;
 }
 void plic_set_threshold(unsigned int hartId, char priority, unsigned int mode)
