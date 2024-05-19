@@ -7,11 +7,12 @@
 
 void kmain()
 {
-    uart_init();
+    // uart_init();
 
-    print("Hi , it's Badr !\n");
-    dispaly_mstatus();
-    display_current_mode();
-
+    // print("Hi , it's Badr !\n");
+    // dispaly_sstatus();
+    // display_current_mode();
+    // while (1);
+    
     // enable UART for keyboard
 }

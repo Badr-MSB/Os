@@ -19,12 +19,26 @@ Discarded input sections
  .riscv.attributes
                 0x0000000000000000       0x30 build/boot_start.o
  .data          0x0000000000000000        0x0 build/handler.o
- .bss           0x0000000000000000        0x0 build/handler.o
  .sdata         0x0000000000000000        0x8 build/handler.o
  .data          0x0000000000000000        0x0 build/main.o
  .bss           0x0000000000000000        0x0 build/main.o
  .sdata         0x0000000000000000        0x8 build/main.o
+ .text          0x0000000000000000       0xd4 build/mcause.o
+ .data          0x0000000000000000       0xd8 build/mcause.o
  .bss           0x0000000000000000        0x0 build/mcause.o
+ .rodata        0x0000000000000000      0x267 build/mcause.o
+ .debug_info    0x0000000000000000      0x127 build/mcause.o
+ .debug_abbrev  0x0000000000000000       0xd4 build/mcause.o
+ .debug_aranges
+                0x0000000000000000       0x30 build/mcause.o
+ .debug_line    0x0000000000000000       0xc5 build/mcause.o
+ .debug_str     0x0000000000000000      0x12e build/mcause.o
+ .debug_line_str
+                0x0000000000000000       0xb4 build/mcause.o
+ .comment       0x0000000000000000       0x1c build/mcause.o
+ .debug_frame   0x0000000000000000       0x40 build/mcause.o
+ .riscv.attributes
+                0x0000000000000000       0x34 build/mcause.o
  .data          0x0000000000000000        0x0 build/mstatus.o
  .bss           0x0000000000000000        0x0 build/mstatus.o
  .data          0x0000000000000000        0x0 build/printf.o
@@ -104,67 +118,61 @@ LOAD build/virt_plic.o
 LOAD build/vprintf.o
                 0x0000000080000000                . = 0x80000000
 
-.text           0x0000000080000000     0x1524
+.text           0x0000000080000000     0x1484
                 [!provide]                        PROVIDE (_text_start = .)
  *(.text.init)
- .text.init     0x0000000080000000      0x6fc build/boot.o
+ .text.init     0x0000000080000000      0x704 build/boot.o
                 0x0000000080000000                _start
  *(.text .text.*)
- .text          0x00000000800006fc       0x7c build/handler.o
-                0x00000000800006fc                timer_handler
- .text          0x0000000080000778       0x3c build/main.o
-                0x0000000080000778                kmain
- .text          0x00000000800007b4       0xc8 build/mcause.o
-                0x00000000800007b4                display_trap_cause
- .text          0x000000008000087c       0xec build/mstatus.o
-                0x000000008000087c                display_current_mode
-                0x0000000080000928                dispaly_mstatus
- .text          0x0000000080000968       0x78 build/printf.o
-                0x0000000080000968                printf
- .text          0x00000000800009e0      0x75c build/sprintf.o
-                0x00000000800009e0                vsnprintf
-                0x0000000080000ffc                vsprintf
-                0x0000000080001048                sprintf
-                0x00000000800010c0                snprintf
- .text          0x000000008000113c      0x338 build/uart.o
-                0x000000008000113c                uart_init
-                0x00000000800012d0                putChar
-                0x000000008000130c                putint
-                0x0000000080001364                intTochar
-                0x0000000080001398                printInt
-                0x000000008000141c                print
- .text          0x0000000080001474       0xb0 build/vprintf.o
-                0x0000000080001474                vprintf
+ .text          0x0000000080000704       0x7c build/handler.o
+                0x0000000080000704                timer_handler
+ .text          0x0000000080000780       0x1c build/main.o
+                0x0000000080000780                kmain
+ .text          0x000000008000079c      0x12c build/mstatus.o
+                0x000000008000079c                display_current_mode
+                0x0000000080000848                dispaly_mstatus
+                0x0000000080000888                dispaly_sstatus
+ .text          0x00000000800008c8       0x78 build/printf.o
+                0x00000000800008c8                printf
+ .text          0x0000000080000940      0x75c build/sprintf.o
+                0x0000000080000940                vsnprintf
+                0x0000000080000f5c                vsprintf
+                0x0000000080000fa8                sprintf
+                0x0000000080001020                snprintf
+ .text          0x000000008000109c      0x338 build/uart.o
+                0x000000008000109c                uart_init
+                0x0000000080001230                putChar
+                0x000000008000126c                putint
+                0x00000000800012c4                intTochar
+                0x00000000800012f8                printInt
+                0x000000008000137c                print
+ .text          0x00000000800013d4       0xb0 build/vprintf.o
+                0x00000000800013d4                vprintf
                 [!provide]                        PROVIDE (_text_end = .)
                 [!provide]                        PROVIDE (_global_pointer = .)
 
-.bss            0x0000000080001528        0x8
+.bss            0x0000000080001488        0x8
                 [!provide]                        PROVIDE (_bss_start = .)
  *(.sbss .sbss.*)
- .sbss          0x0000000080001528        0x8 build/handler.o
-                0x0000000080001528                roundNumer
  *(.bss .bss.*)
+ .bss           0x0000000080001488        0x8 build/handler.o
                 [!provide]                        PROVIDE (_bss_end = .)
 
-.rodata         0x0000000080001530      0x3f7
+.rodata         0x0000000080001490      0x187
                 [!provide]                        PROVIDE (_rodata_start = .)
  *(.rodata .rodata.*)
- .rodata        0x0000000080001530       0x4c build/boot.o
- *fill*         0x000000008000157c        0x4 
- .rodata        0x0000000080001580       0x25 build/handler.o
- *fill*         0x00000000800015a5        0x3 
- .rodata        0x00000000800015a8       0x12 build/main.o
- *fill*         0x00000000800015ba        0x6 
- .rodata        0x00000000800015c0      0x267 build/mcause.o
- *fill*         0x0000000080001827        0x1 
- .rodata        0x0000000080001828       0x58 build/mstatus.o
- .rodata        0x0000000080001880       0x58 build/sprintf.o
- .rodata        0x00000000800018d8       0x4f build/uart.o
+ .rodata        0x0000000080001490       0x4c build/boot.o
+ *fill*         0x00000000800014dc        0x4 
+ .rodata        0x00000000800014e0       0x25 build/handler.o
+ *fill*         0x0000000080001505        0x3 
+ .rodata        0x0000000080001508       0x68 build/mstatus.o
+ .rodata        0x0000000080001570       0x58 build/sprintf.o
+ .rodata        0x00000000800015c8       0x4f build/uart.o
                 [!provide]                        PROVIDE (_rodata_end = .)
 
-.data           0x0000000080001930     0x13b8
+.data           0x0000000080001620     0x15f0
                 0x0000000080002000                . = ALIGN (0x1000)
- *fill*         0x0000000080001930      0x6d0 
+ *fill*         0x0000000080001620      0x9e0 
                 [!provide]                        PROVIDE (_data_start = .)
  *(.sdata .sdata.*)
  .sdata         0x0000000080002000        0x8 build/uart.o
@@ -173,8 +181,6 @@ LOAD build/vprintf.o
  .data          0x0000000080002010      0xc00 build/boot.o
                 0x0000000080002010                _scrachpad
                 0x0000000080002410                _stacks
- .data          0x0000000080002c10       0xd8 build/mcause.o
-                0x0000000080002c10                cause_to_string
                 [!provide]                        PROVIDE (_data_end = .)
                 [!provide]                        PROVIDE (_memory_start = ORIGIN (ram))
                 [!provide]                        PROVIDE (_memory_end = (ORIGIN (ram) + LENGTH (ram)))
@@ -191,92 +197,83 @@ OUTPUT(kernel.elf elf64-littleriscv)
  .riscv.attributes
                 0x0000000000000062       0x30 build/main.o
  .riscv.attributes
-                0x0000000000000092       0x34 build/mcause.o
+                0x0000000000000092       0x34 build/mstatus.o
  .riscv.attributes
-                0x00000000000000c6       0x34 build/mstatus.o
+                0x00000000000000c6       0x30 build/printf.o
  .riscv.attributes
-                0x00000000000000fa       0x30 build/printf.o
+                0x00000000000000f6       0x30 build/sprintf.o
  .riscv.attributes
-                0x000000000000012a       0x30 build/sprintf.o
+                0x0000000000000126       0x30 build/uart.o
  .riscv.attributes
-                0x000000000000015a       0x30 build/uart.o
- .riscv.attributes
-                0x000000000000018a       0x30 build/vprintf.o
+                0x0000000000000156       0x30 build/vprintf.o
 
 .comment        0x0000000000000000       0x1b
  .comment       0x0000000000000000       0x1b build/handler.o
                                          0x1c (size before relaxing)
  .comment       0x000000000000001b       0x1c build/main.o
- .comment       0x000000000000001b       0x1c build/mcause.o
  .comment       0x000000000000001b       0x1c build/mstatus.o
  .comment       0x000000000000001b       0x1c build/printf.o
  .comment       0x000000000000001b       0x1c build/sprintf.o
  .comment       0x000000000000001b       0x1c build/uart.o
  .comment       0x000000000000001b       0x1c build/vprintf.o
 
-.debug_line     0x0000000000000000     0x10d6
- .debug_line    0x0000000000000000      0x492 build/boot.o
- .debug_line    0x0000000000000492       0x7e build/handler.o
- .debug_line    0x0000000000000510       0x7e build/main.o
- .debug_line    0x000000000000058e       0xc5 build/mcause.o
- .debug_line    0x0000000000000653       0xd4 build/mstatus.o
- .debug_line    0x0000000000000727       0x88 build/printf.o
- .debug_line    0x00000000000007af      0x63c build/sprintf.o
- .debug_line    0x0000000000000deb      0x246 build/uart.o
- .debug_line    0x0000000000001031       0xa5 build/vprintf.o
+.debug_line     0x0000000000000000     0x1010
+ .debug_line    0x0000000000000000      0x498 build/boot.o
+ .debug_line    0x0000000000000498       0x7e build/handler.o
+ .debug_line    0x0000000000000516       0x59 build/main.o
+ .debug_line    0x000000000000056f       0xf2 build/mstatus.o
+ .debug_line    0x0000000000000661       0x88 build/printf.o
+ .debug_line    0x00000000000006e9      0x63c build/sprintf.o
+ .debug_line    0x0000000000000d25      0x246 build/uart.o
+ .debug_line    0x0000000000000f6b       0xa5 build/vprintf.o
 
 .debug_line_str
-                0x0000000000000000      0x180
+                0x0000000000000000      0x15e
  .debug_line_str
                 0x0000000000000000       0x3f build/boot.o
  .debug_line_str
                 0x000000000000003f       0x59 build/handler.o
                                          0x99 (size before relaxing)
  .debug_line_str
-                0x0000000000000098       0x17 build/main.o
-                                         0x5d (size before relaxing)
+                0x0000000000000098        0x7 build/main.o
+                                         0x4d (size before relaxing)
  .debug_line_str
-                0x00000000000000af       0x2d build/mcause.o
-                                         0xb4 (size before relaxing)
- .debug_line_str
-                0x00000000000000dc       0x10 build/mstatus.o
+                0x000000000000009f       0x2b build/mstatus.o
                                          0xae (size before relaxing)
  .debug_line_str
-                0x00000000000000ec       0x5f build/printf.o
+                0x00000000000000ca       0x5f build/printf.o
                                          0xc9 (size before relaxing)
  .debug_line_str
-                0x000000000000014b       0x19 build/sprintf.o
+                0x0000000000000129       0x19 build/sprintf.o
                                          0xa6 (size before relaxing)
  .debug_line_str
-                0x0000000000000164        0xc build/uart.o
+                0x0000000000000142        0xc build/uart.o
                                          0x95 (size before relaxing)
  .debug_line_str
-                0x0000000000000170       0x10 build/vprintf.o
+                0x000000000000014e       0x10 build/vprintf.o
                                          0xd5 (size before relaxing)
 
-.debug_info     0x0000000000000000      0xd0c
+.debug_info     0x0000000000000000      0xbdc
  .debug_info    0x0000000000000000       0x29 build/boot.o
- .debug_info    0x0000000000000029       0xf9 build/handler.o
- .debug_info    0x0000000000000122       0xf4 build/main.o
- .debug_info    0x0000000000000216      0x127 build/mcause.o
- .debug_info    0x000000000000033d      0x13f build/mstatus.o
- .debug_info    0x000000000000047c      0x112 build/printf.o
- .debug_info    0x000000000000058e      0x3a5 build/sprintf.o
- .debug_info    0x0000000000000933      0x27d build/uart.o
- .debug_info    0x0000000000000bb0      0x15c build/vprintf.o
+ .debug_info    0x0000000000000029       0xfa build/handler.o
+ .debug_info    0x0000000000000123       0xb0 build/main.o
+ .debug_info    0x00000000000001d3      0x179 build/mstatus.o
+ .debug_info    0x000000000000034c      0x112 build/printf.o
+ .debug_info    0x000000000000045e      0x3a5 build/sprintf.o
+ .debug_info    0x0000000000000803      0x27d build/uart.o
+ .debug_info    0x0000000000000a80      0x15c build/vprintf.o
 
-.debug_abbrev   0x0000000000000000      0x672
+.debug_abbrev   0x0000000000000000      0x557
  .debug_abbrev  0x0000000000000000       0x14 build/boot.o
- .debug_abbrev  0x0000000000000014       0xaf build/handler.o
- .debug_abbrev  0x00000000000000c3       0x98 build/main.o
- .debug_abbrev  0x000000000000015b       0xd4 build/mcause.o
- .debug_abbrev  0x000000000000022f       0xc8 build/mstatus.o
- .debug_abbrev  0x00000000000002f7       0xb3 build/printf.o
- .debug_abbrev  0x00000000000003aa       0xee build/sprintf.o
- .debug_abbrev  0x0000000000000498      0x10d build/uart.o
- .debug_abbrev  0x00000000000005a5       0xcd build/vprintf.o
+ .debug_abbrev  0x0000000000000014       0x9c build/handler.o
+ .debug_abbrev  0x00000000000000b0       0x62 build/main.o
+ .debug_abbrev  0x0000000000000112       0xca build/mstatus.o
+ .debug_abbrev  0x00000000000001dc       0xb3 build/printf.o
+ .debug_abbrev  0x000000000000028f       0xee build/sprintf.o
+ .debug_abbrev  0x000000000000037d      0x10d build/uart.o
+ .debug_abbrev  0x000000000000048a       0xcd build/vprintf.o
 
-.debug_aranges  0x0000000000000000      0x1b0
+.debug_aranges  0x0000000000000000      0x180
  .debug_aranges
                 0x0000000000000000       0x30 build/boot.o
  .debug_aranges
@@ -284,42 +281,37 @@ OUTPUT(kernel.elf elf64-littleriscv)
  .debug_aranges
                 0x0000000000000060       0x30 build/main.o
  .debug_aranges
-                0x0000000000000090       0x30 build/mcause.o
+                0x0000000000000090       0x30 build/mstatus.o
  .debug_aranges
-                0x00000000000000c0       0x30 build/mstatus.o
+                0x00000000000000c0       0x30 build/printf.o
  .debug_aranges
-                0x00000000000000f0       0x30 build/printf.o
+                0x00000000000000f0       0x30 build/sprintf.o
  .debug_aranges
-                0x0000000000000120       0x30 build/sprintf.o
+                0x0000000000000120       0x30 build/uart.o
  .debug_aranges
-                0x0000000000000150       0x30 build/uart.o
- .debug_aranges
-                0x0000000000000180       0x30 build/vprintf.o
+                0x0000000000000150       0x30 build/vprintf.o
 
-.debug_str      0x0000000000000000      0x260
+.debug_str      0x0000000000000000      0x23b
  .debug_str     0x0000000000000000       0x29 build/boot.o
  .debug_str     0x0000000000000029       0xd7 build/handler.o
                                         0x117 (size before relaxing)
- .debug_str     0x0000000000000100       0x3b build/main.o
-                                        0x129 (size before relaxing)
- .debug_str     0x000000000000013b       0x35 build/mcause.o
-                                        0x12e (size before relaxing)
- .debug_str     0x0000000000000170       0x35 build/mstatus.o
-                                        0x126 (size before relaxing)
- .debug_str     0x0000000000000170       0x40 build/printf.o
+ .debug_str     0x0000000000000100        0x6 build/main.o
+                                         0xef (size before relaxing)
+ .debug_str     0x0000000000000106       0x35 build/mstatus.o
+                                        0x136 (size before relaxing)
+ .debug_str     0x000000000000013b       0x40 build/printf.o
                                         0x138 (size before relaxing)
- .debug_str     0x00000000000001b0       0x3d build/sprintf.o
+ .debug_str     0x000000000000017b       0x3d build/sprintf.o
                                         0x130 (size before relaxing)
- .debug_str     0x00000000000001ed       0x73 build/uart.o
+ .debug_str     0x00000000000001b8       0x83 build/uart.o
                                         0x171 (size before relaxing)
- .debug_str     0x0000000000000260      0x148 build/vprintf.o
+ .debug_str     0x000000000000023b      0x148 build/vprintf.o
 
-.debug_frame    0x0000000000000000      0x410
+.debug_frame    0x0000000000000000      0x400
  .debug_frame   0x0000000000000000       0x40 build/handler.o
  .debug_frame   0x0000000000000040       0x40 build/main.o
- .debug_frame   0x0000000000000080       0x40 build/mcause.o
- .debug_frame   0x00000000000000c0       0x70 build/mstatus.o
- .debug_frame   0x0000000000000130       0x40 build/printf.o
- .debug_frame   0x0000000000000170       0xd0 build/sprintf.o
- .debug_frame   0x0000000000000240      0x190 build/uart.o
- .debug_frame   0x00000000000003d0       0x40 build/vprintf.o
+ .debug_frame   0x0000000000000080       0xa0 build/mstatus.o
+ .debug_frame   0x0000000000000120       0x40 build/printf.o
+ .debug_frame   0x0000000000000160       0xd0 build/sprintf.o
+ .debug_frame   0x0000000000000230      0x190 build/uart.o
+ .debug_frame   0x00000000000003c0       0x40 build/vprintf.o

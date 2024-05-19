@@ -45,23 +45,23 @@ s_context_switch_msg: .ascii "S-Mode Switching Context\n\0"
 
 _start:
 
-    #config interrupt processing
-    la t0 , _m_ct_switch
-    csrw mtvec, t0
-
-    la t0, _s_ct_switch
-    csrw stvec, t0
-
     #Set up stack // 4 hart sp -> *******
     csrr t0, mhartid
     la a0, _stacks
     li t2, 512
     mul t1, t0, t2
     add sp, t1, a0
-
+    
     #send all harts to wait for interruption except hart 0
     csrr t0, mhartid
     bnez t0, _wfi
+
+    #config interrupt processing
+    la t0 , _m_ct_switch
+    csrw mtvec, t0
+
+    la t0, _s_ct_switch
+    csrw stvec, t0
 
     call display_current_mode                    # current mode
 
@@ -90,12 +90,12 @@ _start:
 
     # # timer interrupts (M and S mode)
     # # + machine level external interrupts (it will be usefull for keyboard and mouse interrrupts) 
-    li t0, 0x000008a0
+    # li t0, 0x000008a0
     csrrs x0, mie, t0
 
     #delegating timer interrupt to S-Mode
-    li      t0, 0x20
-    csrs    mideleg, t0
+    # li      t0, 0x20
+    # csrs    mideleg, t0
 
     #Setting mtime to 0
     la t0, MTIME

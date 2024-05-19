@@ -2,7 +2,7 @@
 .align 4
 _m_ct_switch:
 
-    call display_trap_cause
+    #call display_trap_cause
 
     csrr t0, mcause
     li t1, 7
@@ -11,7 +11,7 @@ _m_ct_switch:
     and t0 , t0 , t1
     bne t0,t1 , _mret
 
-    call display_trap_cause
+    #call display_trap_cause
 
     la a0, m_context_switch_msg
     call printf
