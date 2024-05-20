@@ -1,3 +1,4 @@
-READ mcause & scause
 PLIC config for Keyboard and Mouse
 send the os to panic when exception occurs
+Custome BIOS
+use qemu 8.2.3

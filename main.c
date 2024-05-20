@@ -5,14 +5,16 @@
 #include "csr_registers.h"
 #include "tools/mstatus.h"
 
+extern int printf(const char *, ...);
+
 void kmain()
 {
-    // uart_init();
+    uart_init();
+    volatile uint16_t i = 0;
 
-    // print("Hi , it's Badr !\n");
-    // dispaly_sstatus();
-    // display_current_mode();
-    // while (1);
-    
-    // enable UART for keyboard
+    printf("Hi , it's Badr !\n");
+
+    //asm volatile("wfi");
+    while (i == 0);
+    __builtin_unreachable();
 }

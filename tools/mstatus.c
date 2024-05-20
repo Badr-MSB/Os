@@ -28,3 +28,8 @@ void dispaly_sstatus()
 {
     printf("sstatus = [%x]\n", csr_read(sstatus));
 }
+
+void dispaly_misa()
+{
+    printf("misa = [%x]\n", csr_read(misa));
+}

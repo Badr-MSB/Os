@@ -1,21 +1,48 @@
-
-.align 4
 _m_ct_switch:
-
-    #call display_trap_cause
+    
+    call m_display_trap_cause
 
     csrr t0, mcause
-    li t1, 7
+    li t1, 0x00000007
     li t2, (1 << 63)
     or t1, t1 , t2
-    and t0 , t0 , t1
-    bne t0,t1 , _mret
-
-    #call display_trap_cause
-
-    la a0, m_context_switch_msg
-    call printf
+    bne t0 ,t1 , _mret
   
+    # push ra
+    # push t0
+    # push t1
+    # push t2
+    # push a0
+    # push a1
+    # push a2 
+    # push a3
+    # push a4
+    # push a5
+    # push a6
+    # push a7
+    # push t3
+    # push t4
+    # push t5
+    # push t6
+    # # # ...
+    # call timer_handler
+    # # # ...
+    # pop t6
+    # pop t5
+    # pop t4
+    # pop t3
+    # pop a7
+    # pop a6
+    # pop a5
+    # pop a4
+    # pop a3 
+    # pop a2
+    # pop a1
+    # pop a0
+    # pop t2
+    # pop t1
+    # pop t0
+    # pop ra
     push x1
     push x2
     push x3
@@ -48,10 +75,9 @@ _m_ct_switch:
     push x29
     push x30
     push x31
-    # # ...
-
+  
     call timer_handler
-    # # ...
+    
     pop x31
     pop x30
     pop x29
@@ -84,6 +110,7 @@ _m_ct_switch:
     pop x3
     pop x2
     pop x1
+ 
 
     mret # pc <- mepc , disable mask 
     

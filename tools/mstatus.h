@@ -3,5 +3,6 @@
 
 void display_current_mode();
 void dispaly_mstatus();
+void dispaly_misa();
 
 #endif

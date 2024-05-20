@@ -7,17 +7,17 @@
 enum cause
 {
     // interrupts
-    supervisor_sfotware_interrupt = 0x10000001,
+    supervisor_sfotware_interrupt = 0x80000001,
     Reserved2,
-    machine_sfotware_interrupt = 0x10000003,
+    machine_sfotware_interrupt = 0x80000003,
     Reserved4,
-    supervisor_timer_interrupt = 0x10000005,
+    supervisor_timer_interrupt = 0x80000005,
     Reserved6,
-    machine_timer_interrupt = 0x10000007,
+    machine_timer_interrupt = 0x80000007,
     Reserved8,
-    supervisor_external_interrupt = 0x10000009,
+    supervisor_external_interrupt = 0x80000009,
     Reserved10,
-    machine_external_interrupt = 0x1000000b,
+    machine_external_interrupt = 0x8000000b,
 
     // exceptions
     Instruction_address_misaligned = 0x0,
@@ -69,5 +69,7 @@ const char *cause_to_string[] = {
     "Reserved",
     "Store_AMO_page_fault"};
 
-void display_trap_cause();
+void m_display_trap_cause();
+void s_display_trap_cause();
+
 #endif

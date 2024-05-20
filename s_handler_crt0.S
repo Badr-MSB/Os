@@ -1,14 +1,13 @@
 _s_ct_switch:
+
+    call s_display_trap_cause
+
     csrr t0, scause
     li t1, 5
     li t2, (1 << 63)
     or t1, t1 , t2
     and t0 , t0 , t1
     bne t0,t1 , _sret
-
-    la a0, s_context_switch_msg
-    call print
-
 
     push x1
     push x2

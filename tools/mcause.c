@@ -1,12 +1,28 @@
 #include "mcause.h"
 #include "../csr_registers.h"
 
-void display_trap_cause()
+void m_display_trap_cause()
 {
-    uint64_t mcause = csr_read(mcause);
-    printf("mcause = [%d]\n", mcause);
+    uint64_t mcause_value = csr_read(mcause);
+    printf("mcause = [%d] ", mcause_value);
+
+    unsigned int cause_code = mcause_value & 0xFFFFFFFF;
+    if (cause_code & 0x80000000)
+    {
+        printf("Interrupt: %s\n", cause_to_string[cause_code - 1]);
+    }
+    else
+    {
+        printf("Exception: %s\n", cause_to_string[cause_code + 11]);
+    }
+
+}
+void s_display_trap_cause()
+{
+    uint64_t scause = csr_read(scause);
+    printf("scause = [%d]\n", scause);
     //  uint64_t mcause_value = csr_read(scause);
-    unsigned int cause_code = mcause & 0xFFFFFFFF;
+    unsigned int cause_code = scause & 0xFFFFFFFF;
     if (cause_code >= 0x80000000)
     {
         printf("Interrupt: %s\n", cause_to_string[cause_code - 1]);
