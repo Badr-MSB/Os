@@ -1,5 +1,3 @@
-#include <stdint.h>
-#include <stddef.h>
 
 #include "uart/uart.h"
 #include "csr_registers.h"

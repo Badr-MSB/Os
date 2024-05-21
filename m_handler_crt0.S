@@ -1,7 +1,5 @@
 _m_ct_switch:
-    
     call m_display_trap_cause
-
     csrr t0, mcause
     li t1, 0x00000007
     li t2, (1 << 63)

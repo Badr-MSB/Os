@@ -1,4 +1,4 @@
 PLIC config for Keyboard and Mouse
 send the os to panic when exception occurs
 Custome BIOS
-use qemu 8.2.3
+use qemu 8.2.3 (Done)

@@ -1,13 +1,10 @@
 _s_ct_switch:
 
-    call s_display_trap_cause
-
-    csrr t0, scause
-    li t1, 5
+    csrr t0, mcause
+    li t1, 0x00000007
     li t2, (1 << 63)
     or t1, t1 , t2
-    and t0 , t0 , t1
-    bne t0,t1 , _sret
+    bne t0 ,t1 , _sret
 
     push x1
     push x2

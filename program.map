@@ -104,71 +104,71 @@ LOAD build/virt_plic.o
 LOAD build/vprintf.o
                 0x0000000080000000                . = 0x80000000
 
-.text           0x0000000080000000     0x1634
+.text           0x0000000080000000     0x1624
                 [!provide]                        PROVIDE (_text_start = .)
  *(.text.init)
- .text.init     0x0000000080000000      0x6d0 build/boot.o
+ .text.init     0x0000000080000000      0x6c8 build/boot.o
                 0x0000000080000000                _start
  *(.text .text.*)
- .text          0x00000000800006d0       0x7c build/handler.o
-                0x00000000800006d0                timer_handler
- .text          0x000000008000074c       0x30 build/main.o
-                0x000000008000074c                kmain
- .text          0x000000008000077c      0x190 build/mcause.o
-                0x000000008000077c                m_display_trap_cause
-                0x0000000080000844                s_display_trap_cause
- .text          0x000000008000090c      0x16c build/mstatus.o
-                0x000000008000090c                display_current_mode
-                0x00000000800009b8                dispaly_mstatus
-                0x00000000800009f8                dispaly_sstatus
-                0x0000000080000a38                dispaly_misa
- .text          0x0000000080000a78       0x78 build/printf.o
-                0x0000000080000a78                printf
- .text          0x0000000080000af0      0x75c build/sprintf.o
-                0x0000000080000af0                vsnprintf
-                0x000000008000110c                vsprintf
-                0x0000000080001158                sprintf
-                0x00000000800011d0                snprintf
- .text          0x000000008000124c      0x338 build/uart.o
-                0x000000008000124c                uart_init
-                0x00000000800013e0                putChar
-                0x000000008000141c                putint
-                0x0000000080001474                intTochar
-                0x00000000800014a8                printInt
-                0x000000008000152c                print
- .text          0x0000000080001584       0xb0 build/vprintf.o
-                0x0000000080001584                vprintf
+ .text          0x00000000800006c8       0x7c build/handler.o
+                0x00000000800006c8                timer_handler
+ .text          0x0000000080000744       0x30 build/main.o
+                0x0000000080000744                kmain
+ .text          0x0000000080000774      0x188 build/mcause.o
+                0x0000000080000774                m_display_trap_cause
+                0x0000000080000834                s_display_trap_cause
+ .text          0x00000000800008fc      0x16c build/mstatus.o
+                0x00000000800008fc                display_current_mode
+                0x00000000800009a8                dispaly_mstatus
+                0x00000000800009e8                dispaly_sstatus
+                0x0000000080000a28                dispaly_misa
+ .text          0x0000000080000a68       0x78 build/printf.o
+                0x0000000080000a68                printf
+ .text          0x0000000080000ae0      0x75c build/sprintf.o
+                0x0000000080000ae0                vsnprintf
+                0x00000000800010fc                vsprintf
+                0x0000000080001148                sprintf
+                0x00000000800011c0                snprintf
+ .text          0x000000008000123c      0x338 build/uart.o
+                0x000000008000123c                uart_init
+                0x00000000800013d0                putChar
+                0x000000008000140c                putint
+                0x0000000080001464                intTochar
+                0x0000000080001498                printInt
+                0x000000008000151c                print
+ .text          0x0000000080001574       0xb0 build/vprintf.o
+                0x0000000080001574                vprintf
                 [!provide]                        PROVIDE (_text_end = .)
                 [!provide]                        PROVIDE (_global_pointer = .)
 
-.bss            0x0000000080001640      0xc08
+.bss            0x0000000080001630      0xc08
                 [!provide]                        PROVIDE (_bss_start = .)
  *(.sbss .sbss.*)
  *(.bss .bss.*)
- .bss           0x0000000080001640      0xc00 build/boot.o
-                0x0000000080001640                _scrachpad
-                0x0000000080001a40                _stacks
- .bss           0x0000000080002240        0x8 build/handler.o
+ .bss           0x0000000080001630      0xc00 build/boot.o
+                0x0000000080001630                _scrachpad
+                0x0000000080001a30                _stacks
+ .bss           0x0000000080002230        0x8 build/handler.o
                 [!provide]                        PROVIDE (_bss_end = .)
 
-.rodata         0x0000000080002248      0x3d7
+.rodata         0x0000000080002238      0x3d7
                 [!provide]                        PROVIDE (_rodata_start = .)
  *(.rodata .rodata.*)
- .rodata        0x0000000080002248       0x25 build/handler.o
- *fill*         0x000000008000226d        0x3 
- .rodata        0x0000000080002270       0x12 build/main.o
- *fill*         0x0000000080002282        0x6 
- .rodata        0x0000000080002288      0x277 build/mcause.o
- *fill*         0x00000000800024ff        0x1 
- .rodata        0x0000000080002500       0x75 build/mstatus.o
- *fill*         0x0000000080002575        0x3 
- .rodata        0x0000000080002578       0x58 build/sprintf.o
- .rodata        0x00000000800025d0       0x4f build/uart.o
+ .rodata        0x0000000080002238       0x25 build/handler.o
+ *fill*         0x000000008000225d        0x3 
+ .rodata        0x0000000080002260       0x12 build/main.o
+ *fill*         0x0000000080002272        0x6 
+ .rodata        0x0000000080002278      0x277 build/mcause.o
+ *fill*         0x00000000800024ef        0x1 
+ .rodata        0x00000000800024f0       0x75 build/mstatus.o
+ *fill*         0x0000000080002565        0x3 
+ .rodata        0x0000000080002568       0x58 build/sprintf.o
+ .rodata        0x00000000800025c0       0x4f build/uart.o
                 [!provide]                        PROVIDE (_rodata_end = .)
 
-.data           0x0000000080002620      0xac0
+.data           0x0000000080002610      0xad0
                 0x0000000080003000                . = ALIGN (0x1000)
- *fill*         0x0000000080002620      0x9e0 
+ *fill*         0x0000000080002610      0x9f0 
                 [!provide]                        PROVIDE (_data_start = .)
  *(.sdata .sdata.*)
  .sdata         0x0000000080003000        0x8 build/uart.o
@@ -214,16 +214,16 @@ OUTPUT(kernel.elf elf64-littleriscv)
  .comment       0x000000000000001b       0x1c build/uart.o
  .comment       0x000000000000001b       0x1c build/vprintf.o
 
-.debug_line     0x0000000000000000     0x1176
- .debug_line    0x0000000000000000      0x486 build/boot.o
- .debug_line    0x0000000000000486       0x7c build/handler.o
- .debug_line    0x0000000000000502       0x8a build/main.o
- .debug_line    0x000000000000058c      0x12b build/mcause.o
- .debug_line    0x00000000000006b7      0x110 build/mstatus.o
- .debug_line    0x00000000000007c7       0x88 build/printf.o
- .debug_line    0x000000000000084f      0x63c build/sprintf.o
- .debug_line    0x0000000000000e8b      0x246 build/uart.o
- .debug_line    0x00000000000010d1       0xa5 build/vprintf.o
+.debug_line     0x0000000000000000     0x1168
+ .debug_line    0x0000000000000000      0x47a build/boot.o
+ .debug_line    0x000000000000047a       0x7c build/handler.o
+ .debug_line    0x00000000000004f6       0x88 build/main.o
+ .debug_line    0x000000000000057e      0x12b build/mcause.o
+ .debug_line    0x00000000000006a9      0x110 build/mstatus.o
+ .debug_line    0x00000000000007b9       0x88 build/printf.o
+ .debug_line    0x0000000000000841      0x63c build/sprintf.o
+ .debug_line    0x0000000000000e7d      0x246 build/uart.o
+ .debug_line    0x00000000000010c3       0xa5 build/vprintf.o
 
 .debug_line_str
                 0x0000000000000000      0x176
