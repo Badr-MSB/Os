@@ -9,5 +9,5 @@ void timer_handler()
     static uint64_t roundNumer = 0x0;
     printf("Timer interrupt handled [%d] times \n", roundNumer);
     roundNumer++;
-    set_mtimecmp(roundNumer * RTC_FREQUENCY * 2 );
+    set_mtime(0);
 }

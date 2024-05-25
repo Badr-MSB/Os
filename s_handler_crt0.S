@@ -39,7 +39,7 @@ _s_ct_switch:
     push x30
     push x31
   
-    call timer_handler
+    #call timer_handler
     
     pop x31
     pop x30

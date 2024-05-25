@@ -20,10 +20,10 @@ void m_display_trap_cause()
 void s_display_trap_cause()
 {
     uint64_t scause = csr_read(scause);
-    printf("scause = [%d]\n", scause);
+    printf("scause = [%lx]\n", scause);
     //  uint64_t mcause_value = csr_read(scause);
     unsigned int cause_code = scause & 0xFFFFFFFF;
-    if (cause_code >= 0x80000000)
+    if (cause_code >= (1 << 63 ))
     {
         printf("Interrupt: %s\n", cause_to_string[cause_code - 1]);
     }
