@@ -9,41 +9,9 @@ _m_ct_switch:
     or t1, t1 , t2
     bne t0 ,t1 , _mret
     csrc mip, 0x10
-    # push ra
-    # push t0
-    # push t1
-    # push t2
-    # push a0
-    # push a1
-    # push a2 
-    # push a3
-    # push a4
-    # push a5
-    # push a6
-    # push a7
-    # push t3
-    # push t4
-    # push t5
-    # push t6
-    # # # ...
-    # call timer_handler
-    # # # ...
-    # pop t6
-    # pop t5
-    # pop t4
-    # pop t3
-    # pop a7
-    # pop a6
-    # pop a5
-    # pop a4
-    # pop a3 
-    # pop a2
-    # pop a1
-    # pop a0
-    # pop t2
-    # pop t1
-    # pop t0
-    # pop ra
+    
+    csrrw sp, mscratch, sp
+    
     push x1
     push x2
     push x3
@@ -111,7 +79,8 @@ _m_ct_switch:
     pop x3
     pop x2
     pop x1
- 
+
+    csrrw sp, mscratch, sp
     mret # pc <- mepc , mstatus.SIE <- mstatus.SPIE, ...
     
 _mret:

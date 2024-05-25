@@ -38,9 +38,9 @@ s_context_switch_msg: .ascii "S-Mode Switching Context\n\0"
     .globl _stacks
     _stacks: .skip 2048
 
-    # .align 4
-    # .globl _mtrap_stacks
-    # _mtrap_stacks: .skip 2048
+    .align 4
+    .globl _mtrap_stacks
+    _mtrap_stacks: .skip 2048
 
     
 .section .text.init
@@ -57,8 +57,8 @@ _start:
     add sp, t1, a0
     
     # place machine trap stack on m mscratch
-    # la  t1, _mtrap_stacks + 2048
-    # csrw mscratch, t1
+    la  t1, _mtrap_stacks
+    csrw mscratch, t1
 
     csrw satp, x0                                # Disable address translation (pagging).
     #send all harts to wait for interruption except hart 0
