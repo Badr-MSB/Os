@@ -1,6 +1,6 @@
 #include "mstatus.h"
 #include "../lib/stdio.h"
-#include "../csr_registers.h"
+#include "csr_registers.h"
 
 void display_current_mode()
 {

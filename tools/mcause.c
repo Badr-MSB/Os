@@ -1,5 +1,6 @@
 #include "mcause.h"
-#include "../csr_registers.h"
+#include "csr_registers.h"
+#include "../lib/stdio.h"
 
 void m_display_trap_cause()
 {

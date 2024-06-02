@@ -1,7 +1,7 @@
 .option norvc 
 .align 8
 
-.bss 
+.section .text
 .macro push reg
     sd \reg, 0(sp)
     li t0, -8

@@ -1,6 +1,6 @@
 
 #include "uart/uart.h"
-#include "csr_registers.h"
+#include "tools/csr_registers.h"
 #include "tools/mstatus.h"
 
 extern int printf(const char *, ...);

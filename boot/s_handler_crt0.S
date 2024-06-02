@@ -1,17 +1,6 @@
-# the M-mode timer interrupt cannot be delegated to S-msode
-# whenever the timer interrupt occurs it will be handled here
-# solution : force a Sofware Interrupt ^_^
-_m_ct_switch:
-    call m_display_trap_cause
-    csrr t0, mcause
-    li t1, 0x00000007
-    li t2, (1 << 63)
-    or t1, t1 , t2
-    bne t0 ,t1 , _mret
-    csrc mip, 0x10
-    
-    csrrw sp, mscratch, sp
-    
+.globl _s_ct_switch
+_s_ct_switch:
+
     push x1
     push x2
     push x3
@@ -45,7 +34,7 @@ _m_ct_switch:
     push x30
     push x31
   
-    call timer_handler
+    call supervisor_trap_handler
     
     pop x31
     pop x30
@@ -79,9 +68,8 @@ _m_ct_switch:
     pop x3
     pop x2
     pop x1
-
-    csrrw sp, mscratch, sp
-    mret # pc <- mepc , mstatus.SIE <- mstatus.SPIE, ...
+ 
+    sret # pc <- sepc , disable mask 
     
-_mret:
-    mret
+_sret:
+    sret

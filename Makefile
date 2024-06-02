@@ -15,16 +15,25 @@ RUN+=-bios none -kernel $(KERNEL_IMAGE) -rtc base=localtime -k fr
 # Format
 INDENT_FLAGS=-linux -brf -i2
 
-all: boot uart handler main virt_plic mcause mstatus s_trap_handler
+all: lib entry uart handler boot main virt_plic mcause mstatus s_trap_handler
 	$(CC) build/*.o $(CFLAGS) -T $(LINKER_SCRIPT) -o $(KERNEL_IMAGE) -Wl,-Map=program.map
 
-boot:
-	$(CC) $(RUNTIME) -c $(CFLAGS) -o build/boot.o
+lib:
+	cd lib && $(MAKE) 
+
+entry:
+	cd boot && $(MAKE)
+
+# m_handler_crt0:
+# 	$(CC) boot/m_handler_crt0.S -c $(CFLAGS) -o build/m_handler_crt0.o
+
+# s_handler_crt0:
+# 	$(CC) boot/s_handler_crt0.S -c $(CFLAGS) -o build/s_handler_crt0.o
 
 uart: uart/uart.h
 	$(CC) -c uart/uart.c $(CFLAGS) -o build/uart.o
 
-mcause: tools/mcause.h
+mcause: tools/mcause.h lib
 	$(CC) -c tools/mcause.c $(CFLAGS) -o build/mcause.o
 
 mstatus: tools/mstatus.h
