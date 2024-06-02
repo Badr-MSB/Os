@@ -107,8 +107,8 @@ _start:
     li t0, 0x00000080
     csrs mie, t0
 
-    #delegating MTI to S-Mode
-    li      t0, 0x80
+    #delegating all interrupts to S-Mode
+    li      t0, 0xffff
     csrs    mideleg, t0
 
     //la ra, _wfi

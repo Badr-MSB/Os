@@ -2,3 +2,5 @@ build/*
 kernel.elf
 *.txt
 program.map
+disassemble.txt
+TODO.txt

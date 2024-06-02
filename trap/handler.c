@@ -1,8 +1,8 @@
 #include "handler.h"
-#include "clint.h"
-#include "uart/uart.h"
+#include "../clint.h"
+#include "../uart/uart.h"
+#include "../lib/stdio.h"
 
-extern int printf(const char *, ...);
 
 void timer_handler() 
 {

@@ -1,11 +1,5 @@
 _s_ct_switch:
 
-    csrr t0, mcause
-    li t1, 0x00000007
-    li t2, (1 << 63)
-    or t1, t1 , t2
-    bne t0 ,t1 , _sret
-
     push x1
     push x2
     push x3
@@ -39,7 +33,7 @@ _s_ct_switch:
     push x30
     push x31
   
-    #call timer_handler
+    call supervisor_trap_handler
     
     pop x31
     pop x30

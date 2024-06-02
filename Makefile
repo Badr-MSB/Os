@@ -2,8 +2,8 @@ CC=riscv64-unknown-elf-gcc
 CFLAGS=-ffreestanding -nostartfiles -nostdlib -nodefaultlibs
 CFLAGS+=-g -Wl,--gc-sections -mcmodel=medany -march=rv64g
 CFLAGS+=-Wl,--no-warn-rwx-segments
-RUNTIME=ctr0.S 
-LINKER_SCRIPT=kernel.ld
+RUNTIME=boot/ctr0.S 
+LINKER_SCRIPT=boot/kernel.ld
 KERNEL_IMAGE=kernel.elf
 
 # QEMU
@@ -15,14 +15,11 @@ RUN+=-bios none -kernel $(KERNEL_IMAGE) -rtc base=localtime -k fr
 # Format
 INDENT_FLAGS=-linux -brf -i2
 
-all: uart handler main boot virt_plic boot_start mcause mstatus
+all: boot uart handler main virt_plic mcause mstatus s_trap_handler
 	$(CC) build/*.o $(CFLAGS) -T $(LINKER_SCRIPT) -o $(KERNEL_IMAGE) -Wl,-Map=program.map
 
 boot:
 	$(CC) $(RUNTIME) -c $(CFLAGS) -o build/boot.o
-
-boot_start: boot.c
-	$(CC) -c boot.c $(CFLAGS) -o build/boot_start.o
 
 uart: uart/uart.h
 	$(CC) -c uart/uart.c $(CFLAGS) -o build/uart.o
@@ -34,10 +31,13 @@ mstatus: tools/mstatus.h
 	$(CC) -c tools/mstatus.c $(CFLAGS) -o build/mstatus.o
 
 handler:
-	$(CC) -c handler.c $(CFLAGS) -o build/handler.o
+	$(CC) -c trap/handler.c $(CFLAGS) -o build/handler.o
 
 virt_plic: plic/virt_plic.h
 	$(CC) -c plic/virt_plic.c $(CFLAGS) -o build/virt_plic.o
+
+s_trap_handler:
+	$(CC) -c trap/supervisor_trap.c $(CFLAGS) -o build/supervisor_trap.o
 
 main:
 	$(CC) -c main.c $(CFLAGS) -o build/main.o
@@ -56,6 +56,6 @@ format:
 	echo "You should now \`make run\` to confirm the project still builds and runs correctly"
 
 clean:
-	rm -vf *.o build/*.o lib/*.o
+	rm -vf *.o build/*.o *.map 
 	rm -vf $(KERNEL_IMAGE)
 	find . -name '*~' -exec rm -vf '{}' \;
