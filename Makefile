@@ -14,15 +14,18 @@ RUN+=-bios none -kernel $(KERNEL_IMAGE) -rtc base=localtime -k fr
 
 # Format
 INDENT_FLAGS=-linux -brf -i2
+# Always run targets : lib & boot 
+.PHONY: lib
+.PHONY: boot
 
-all: lib entry uart handler boot main virt_plic mcause mstatus s_trap_handler
+all: lib boot uart handler boot main virt_plic mcause mstatus s_trap_handler
 	$(CC) build/*.o $(CFLAGS) -T $(LINKER_SCRIPT) -o $(KERNEL_IMAGE) -Wl,-Map=program.map
 
 lib:
-	cd lib && $(MAKE) 
+	(cd ./lib && make all)
 
-entry:
-	cd boot && $(MAKE)
+boot:
+	(cd ./boot && make boot)
 
 # m_handler_crt0:
 # 	$(CC) boot/m_handler_crt0.S -c $(CFLAGS) -o build/m_handler_crt0.o

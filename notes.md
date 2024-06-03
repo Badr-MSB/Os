@@ -20,7 +20,7 @@ The machine mode timer interrupt is generated when:
 - MTIE in mie is enabled
 - mtime > mtimecmp
 
-N.B : machine timer interrupts connot be delegated to Supervisor mode
+N.B : machine timer interrupts connot be delegated to Supervisor mode. To do so, unse sofware interrupts.
 
 ## Software Interrupt
 
