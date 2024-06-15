@@ -3,9 +3,11 @@
 
 #include "uart.h"
 
+volatile uint32_t *uart = (uint32_t *)VIRT_UART0_CTRL_ADDR;
+
 void uart_init()
 {
-    volatile uint8_t *ptr = (uint8_t *)0x10000000;
+    volatile uint8_t *ptr = (uint8_t *)UART_ADDR;
     ptr[1] = 0;
     // Set word length to 8 (LCR[1:0])
     const uint8_t LCR = 0x11;

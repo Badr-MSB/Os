@@ -18,7 +18,7 @@ INDENT_FLAGS=-linux -brf -i2
 .PHONY: lib
 .PHONY: boot
 
-all: lib boot uart handler boot main virt_plic mcause mstatus s_trap_handler
+all: lib boot uart pci handler boot main virt_plic mcause mstatus s_trap_handler
 	$(CC) build/*.o $(CFLAGS) -T $(LINKER_SCRIPT) -o $(KERNEL_IMAGE) -Wl,-Map=program.map
 
 lib:
@@ -27,11 +27,8 @@ lib:
 boot:
 	(cd ./boot && make boot)
 
-# m_handler_crt0:
-# 	$(CC) boot/m_handler_crt0.S -c $(CFLAGS) -o build/m_handler_crt0.o
-
-# s_handler_crt0:
-# 	$(CC) boot/s_handler_crt0.S -c $(CFLAGS) -o build/s_handler_crt0.o
+pci: pcie/pci.h
+	$(CC) -c pcie/pci.c $(CFLAGS) -o build/pci.o
 
 uart: uart/uart.h
 	$(CC) -c uart/uart.c $(CFLAGS) -o build/uart.o
