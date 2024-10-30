@@ -25,7 +25,7 @@ SECTIONS
     PROVIDE(_text_end = .);
   } >ram AT>ram :text
 
-   PROVIDE(_global_pointer = .);
+  PROVIDE(_global_pointer = .);
 
   .bss : {
     PROVIDE(_bss_start = .);
@@ -48,9 +48,11 @@ SECTIONS
 
   PROVIDE(_memory_start = ORIGIN(ram));
   PROVIDE(_memory_end = ORIGIN(ram) + LENGTH(ram));
-  PROVIDE(_heap_end = _memory_end - 4096);
-  PROVIDE(_heap_counter = _heap_end + 8);
+  /* PROVIDE(_heap_end = _memory_end - 4096);
+  PROVIDE(_heap_counter = _heap_end + 8); */
 
   PROVIDE(_vga_framebuffer = 0x50000000);
   PROVIDE(_vga_mmio = 0x40000000);
+  PROVIDE(_kernel_space_end = 0x80000000 + 0x40000000 );
+
 }

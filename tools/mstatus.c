@@ -22,14 +22,14 @@ void display_current_mode()
 }
 void dispaly_mstatus()
 {
-    printf("mstatus = [%x]\n", csr_read(mstatus));
+    printf("mstatus = [%lx]\n", csr_read(mstatus));
 }
 void dispaly_sstatus()
 {
-    printf("sstatus = [%x]\n", csr_read(sstatus));
+    printf("sstatus = [%lx]\n", csr_read(sstatus));
 }
 
 void dispaly_misa()
 {
-    printf("misa = [%x]\n", csr_read(misa));
+    printf("misa = [%lx]\n", csr_read(misa));
 }
