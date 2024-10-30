@@ -8,8 +8,8 @@ KERNEL_IMAGE=kernel.elf
 
 # QEMU
 QEMU=qemu-system-riscv64
-MACH= virt -nographic -cpu rv64 -smp 1 -m 1G -serial mon:stdio
-RUN=$(QEMU) -device VGA -machine $(MACH)
+MACH= virt -cpu rv64 -smp 1 -m 1G -serial mon:stdio
+RUN=$(QEMU) -device VGA -machine $(MACH) 
 RUN+=-bios none -kernel $(KERNEL_IMAGE) -rtc base=localtime -k fr
 
 # Format
@@ -18,7 +18,7 @@ INDENT_FLAGS=-linux -brf -i2
 .PHONY: lib
 .PHONY: boot
 
-all: lib boot uart pci handler boot main virt_plic mcause mstatus s_trap_handler
+all: lib boot uart pci handler boot main virt_plic mcause mstatus s_trap_handler vga
 	$(CC) build/*.o $(CFLAGS) -T $(LINKER_SCRIPT) -o $(KERNEL_IMAGE) -Wl,-Map=program.map
 
 lib:
@@ -29,6 +29,9 @@ boot:
 
 pci: pcie/pci.h
 	$(CC) -c pcie/pci.c $(CFLAGS) -o build/pci.o
+
+vga: vga.S 
+	$(CC) -c vga.S -o ./build/vga.o
 
 uart: uart/uart.h
 	$(CC) -c uart/uart.c $(CFLAGS) -o build/uart.o

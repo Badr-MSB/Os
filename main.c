@@ -1,4 +1,3 @@
-
 #include "uart/uart.h"
 #include "tools/csr_registers.h"
 #include "tools/mstatus.h"
@@ -10,6 +9,8 @@ void kmain()
 {
     uart_init();
     list_pci_devices();
+    
+    draw_example();
     volatile uint16_t i = 0;
 
     printf("Hi , it's Badr !\n");

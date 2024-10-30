@@ -40,7 +40,7 @@ static int virt_uart_putchar(int ch)
 
 int putChar(char c)
 {
-    volatile uint8_t *ptr = (uint8_t *)UART_ADDR;
+    uint8_t *ptr = (uint8_t *)UART_ADDR;
     ptr[0] = c;
     return 1;
 }

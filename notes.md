@@ -11,7 +11,7 @@ For Qemu virt :
 | CLINT mtimecmp      |   0x204000 + 8 * hartId |     8     |
 | CLINT mtime         |     0x0200bff8          |     8     |
 
-the mtime can be readed by using the pseudo-instruction rdtime
+the mtime can be read using the pseudo-instruction rdtime.
 
 ## Timer Interupt à la RISC-V
 
