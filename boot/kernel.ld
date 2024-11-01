@@ -53,6 +53,6 @@ SECTIONS
 
   PROVIDE(_vga_framebuffer = 0x50000000);
   PROVIDE(_vga_mmio = 0x40000000);
-  PROVIDE(_kernel_space_end = 0x80000000 + 0x40000000 );
+  /* PROVIDE(_kernel_space_end = 0x80000000 + 0x40000000 ); */
 
 }

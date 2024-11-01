@@ -8,7 +8,7 @@ KERNEL_IMAGE=kernel.elf
 
 # QEMU
 QEMU=qemu-system-riscv64
-MACH= virt -cpu rv64 -smp 1 -m 1G -serial mon:stdio -nographic
+MACH= virt -cpu rv64 -smp 1 -m 2G -serial mon:stdio -nographic
 RUN=$(QEMU) -device VGA -machine $(MACH) 
 RUN+=-bios none -kernel $(KERNEL_IMAGE) -rtc base=localtime -k fr
 
