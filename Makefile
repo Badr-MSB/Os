@@ -1,7 +1,6 @@
 CC=riscv64-unknown-elf-gcc
 CFLAGS=-ffreestanding -nostartfiles -nostdlib -nodefaultlibs
 CFLAGS+=-g -Wl,--gc-sections -mcmodel=medany -march=rv64g
-CFLAGS+=-Wl,--no-warn-rwx-segments
 RUNTIME=boot/ctr0.S 
 LINKER_SCRIPT=boot/kernel.ld
 KERNEL_IMAGE=kernel.elf
@@ -18,9 +17,11 @@ INDENT_FLAGS=-linux -brf -i2
 .PHONY: lib
 .PHONY: boot
 
-all: lib boot uart syscon pci handler boot main virt_plic mcause mstatus s_trap_handler vga
+all: buildfolder uart lib boot syscon pci handler boot main virt_plic mcause mstatus s_trap_handler vga
 	$(CC) build/*.o $(CFLAGS) -T $(LINKER_SCRIPT) -o $(KERNEL_IMAGE) -Wl,-Map=program.map
 
+buildfolder:
+	mkdir -p build
 lib:
 	(cd ./lib && make all)
 
@@ -74,3 +75,4 @@ clean:
 	rm -vf *.o build/*.o *.map 
 	rm -vf $(KERNEL_IMAGE)
 	find . -name '*~' -exec rm -vf '{}' \;
+	rm -r build

@@ -16,7 +16,7 @@
 #define VIRT_UART0_CTRL_ADDR 0x66660010
 #define VIRT_POWEROFF_CTRL_ADDR 0x66660002
 
-void uart_init();
+void uart_init(); 
 
 int putChar(char);
 

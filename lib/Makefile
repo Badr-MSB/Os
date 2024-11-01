@@ -4,7 +4,6 @@
 CC=riscv64-unknown-elf-gcc
 CFLAGS=-ffreestanding -nostartfiles -nostdlib -nodefaultlibs
 CFLAGS+=-g -Wl,--gc-sections -mcmodel=medany -march=rv64g
-CFLAGS+=-Wl,--no-warn-rwx-segments
 LIBIMAGE=libmystdio.o
 
 all: printf putchar puts sprintf vprintf 
