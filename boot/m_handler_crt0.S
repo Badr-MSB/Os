@@ -6,7 +6,7 @@ _m_ct_switch:
     call m_display_trap_cause
     csrr t0, mcause
     li t1, 0x00000007
-    li t2, (1 << 63)
+    li t2, (1ul << 63 )
     or t1, t1 , t2
     bne t0 ,t1 , _mret
     csrc mip, 0x10

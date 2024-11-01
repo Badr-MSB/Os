@@ -13,8 +13,8 @@ extern char _memory_end[];
 void kmain()
 {
     //*********** Dump memory ************//
-    uint64_t * memory_start = _memory_start;
-    uint64_t * memory_end = _memory_end;
+    uint64_t * memory_start = (uint64_t*)_memory_start;
+    uint64_t * memory_end = (uint64_t*)_memory_end;
 
     printf("memory start : %x \n", memory_start);
     printf("memory end : %x\n", memory_end);
