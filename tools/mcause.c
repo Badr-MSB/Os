@@ -1,6 +1,7 @@
 #include "mcause.h"
 #include "csr_registers.h"
 #include "../lib/stdio.h"
+#include "../trap/handler.h"
 
 void m_display_trap_cause()
 {
@@ -31,5 +32,26 @@ void s_display_trap_cause()
     else
     {
         printf("Exception: %s\n", cause_to_string[cause_code + 11]);
+    }
+}
+
+void m_trap_handler(){
+    uint64_t mcause = csr_read(mcause);
+    if (mcause & (1ul<<63))
+    {
+        switch (mcause)
+        {
+        case machine_timer_interrupt:
+            timer_handler();
+            break;
+        
+        default:
+            printf("Interrupt: %s unhandled\n", cause_to_string[(mcause  & ~(1ul<<63)) - 1]);
+            break;
+        }
+    }
+    else
+    {
+        printf("Exception: %s unhandled\n", cause_to_string[(mcause  & ~(1ul<<63)) + 11]);
     }
 }
