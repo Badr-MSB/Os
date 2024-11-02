@@ -24,7 +24,7 @@ void kmain()
     uart_init();
     list_pci_devices();
     
-    //draw_example();
+    // draw_example();
     volatile uint16_t i = 0;
 
     printf("Hi , it's Badr !\n");

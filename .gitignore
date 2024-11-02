@@ -1,6 +1,7 @@
 build/*
-kernel.elf
+*.elf
 *.txt
 program.map
 *.dtb
 *.dts
+*.sh
