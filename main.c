@@ -3,12 +3,28 @@
 #include "tools/mstatus.h"
 #include "pcie/pci.h"
 #include "syscon/syscon.h"
+#include "tools/alloc.h"
 
 extern int printf(const char*, ...);
 
 extern char _memory_start[];
 extern char _memory_end[]; 
 
+
+char src[] = "deadbeaf deadbea  a ";
+char dst[21] = {0};
+
+void func(){
+    kmemcpy(src,dst,21);
+    for(int i = 0; i<21; i++){
+        if(src[i] != dst[i]){
+            printf("there is an error in memcpy\n");
+            return;
+        }
+    }
+    printf("memcpy seems correct\n");
+    return;
+}
 
 void kmain()
 {
@@ -26,9 +42,11 @@ void kmain()
     
     // draw_example();
     volatile uint16_t i = 0;
-
+    func();
     printf("Hi , it's Badr !\n");
 
     while (i == 0);
     __builtin_unreachable();
 }
+
+
