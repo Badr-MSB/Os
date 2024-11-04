@@ -17,7 +17,7 @@ INDENT_FLAGS=-linux -brf -i2
 .PHONY: lib
 .PHONY: boot
 
-all: buildfolder uart lib boot syscon pci handler boot main virt_plic mcause mstatus s_trap_handler vga
+all: buildfolder uart lib boot syscon pci handler boot main virt_plic mcause mstatus alloc s_trap_handler vga
 	$(CC) build/*.o $(CFLAGS) -T $(LINKER_SCRIPT) -o $(KERNEL_IMAGE) -Wl,-Map=program.map
 
 buildfolder:
@@ -45,6 +45,9 @@ mcause: tools/mcause.h lib
 
 mstatus: tools/mstatus.h
 	$(CC) -c tools/mstatus.c $(CFLAGS) -o build/mstatus.o
+
+alloc: tools/alloc.h
+	$(CC) -c tools/alloc.c $(CFLAGS) -o build/alloc.o
 
 handler:
 	$(CC) -c trap/handler.c $(CFLAGS) -o build/handler.o

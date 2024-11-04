@@ -46,6 +46,17 @@ SECTIONS
     PROVIDE(_data_end = .);
   } >ram AT>ram :data
 
+  .bss : {
+    PROVIDE(_bss_start = .);
+    *(.sbss .sbss.*) *(.bss .bss.*)
+    PROVIDE(_bss_end = .);
+    . = ALIGN(2*1024*1024); /*align to 2 Mib */
+    PROVIDE(_bss_end_align = .);
+    PROVIDE(_heap_start = _bss_end_align);
+    PROVIDE(_heap_end = _heap_start + 2M);
+    PROVIDE(_free_memory_start = _heap_end);
+  } >ram AT>ram :bss
+
   PROVIDE(_memory_start = ORIGIN(ram));
   PROVIDE(_memory_end = ORIGIN(ram) + LENGTH(ram));
   /* PROVIDE(_heap_end = _memory_end - 4096);
