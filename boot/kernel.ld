@@ -55,15 +55,15 @@ SECTIONS
     PROVIDE(_heap_start = _bss_end_align);
     PROVIDE(_heap_end = _heap_start + 2M);
     PROVIDE(_free_memory_start = _heap_end);
+    . = ALIGN(4*1024); /* align to 4k*/
+    PROVIDE(_page_table_start = .);
   } >ram AT>ram :bss
 
   PROVIDE(_memory_start = ORIGIN(ram));
   PROVIDE(_memory_end = ORIGIN(ram) + LENGTH(ram));
-  /* PROVIDE(_heap_end = _memory_end - 4096);
-  PROVIDE(_heap_counter = _heap_end + 8); */
 
   PROVIDE(_vga_framebuffer = 0x50000000);
   PROVIDE(_vga_mmio = 0x40000000);
-  PROVIDE(_kernel_space_end = 0x80000000 + 0x40000000 );
+  /* PROVIDE(_kernel_space_end = 0x80000000 + 0x40000000 ); */
 
 }
