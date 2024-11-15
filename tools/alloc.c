@@ -14,9 +14,9 @@ uint64_t g_kernel_heap_size_ui64 = 0;
 uint64_t g_kernel_heap_start_ui64 = 0;
 uint64_t g_kernel_heap_end_ui64 = 0;
 uint64_t g_kernel_heap_cursor_ui64 = 0;
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// + prev | next | size | isfree | magic |          data          | magic+
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// + prev | next | size | isfree | magic |          data          | magic +
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 int32_t init_mem_alloc_ui32()
 {
@@ -50,7 +50,7 @@ void *kmalloc(uint32_t f_size_ui32)
 
 /* there is no free */
 
-void kmemcpy(void *f_src_pvd, void *f_dst_pvd, uint32_t f_size_ui32)
+void kmemncpy(void *f_src_pvd, void *f_dst_pvd, uint32_t f_size_ui32)
 {
     uint64_t *l_src_pui64 = f_src_pvd;
     uint64_t *l_dst_pui64 = f_dst_pvd;

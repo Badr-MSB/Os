@@ -16,8 +16,10 @@ INDENT_FLAGS=-linux -brf -i2
 # Always run targets : lib & boot 
 .PHONY: lib
 .PHONY: boot
+.PHONY: uart
+.PHONY: ktest
 
-all: buildfolder uart lib boot syscon pci handler boot main virt_plic mcause mstatus alloc s_trap_handler vga
+all: buildfolder uart lib boot syscon pci handler boot main virt_plic mcause mstatus alloc s_trap_handler vga ktest vm
 	$(CC) build/*.o $(CFLAGS) -T $(LINKER_SCRIPT) -o $(KERNEL_IMAGE) -Wl,-Map=program.map
 
 buildfolder:
@@ -57,6 +59,9 @@ virt_plic: plic/virt_plic.h
 
 s_trap_handler:
 	$(CC) -c trap/supervisor_trap.c $(CFLAGS) -o build/supervisor_trap.o
+
+ktest: test/ktest.h
+	$(CC) -c test/ktest.c $(CFLAGS) -o build/ktest.o
 
 main:
 	$(CC) -c main.c $(CFLAGS) -o build/main.o
