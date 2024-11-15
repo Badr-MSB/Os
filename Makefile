@@ -63,6 +63,9 @@ s_trap_handler:
 ktest: test/ktest.h
 	$(CC) -c test/ktest.c $(CFLAGS) -o build/ktest.o
 
+vm: virtual-memo/paging.h
+	$(CC) -c virtual-memo/paging.c $(CFLAGS) -o build/paging.o
+
 main:
 	$(CC) -c main.c $(CFLAGS) -o build/main.o
 
