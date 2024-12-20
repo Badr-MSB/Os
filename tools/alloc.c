@@ -25,9 +25,9 @@ int32_t init_mem_alloc_ui32()
     uint64_t l_heap_size_ui64 = l_heap_end_ui64 - l_heap_start_ui64;
     struct mem_struct l_memory_st = (struct mem_struct){0};
 
-    if (l_heap_start_ui64 % (2 * MiB))
+    if (l_heap_start_ui64 % (4 * MiB))
         return -1;
-    if (l_heap_end_ui64 % (2 * MiB))
+    if (l_heap_end_ui64 % (4 * MiB))
         return -1;
     if (!l_heap_size_ui64)
         return -1;
@@ -43,8 +43,8 @@ int32_t init_mem_alloc_ui32()
 void *kmalloc(uint32_t f_size_ui32)
 {
     /*find if there is enough place*/
-    uint64_t l_returned_pointer_ui64 = g_kernel_heap_cursor_ui64;
-    g_kernel_heap_cursor_ui64 += f_size_ui32;
+    uint64_t l_returned_pointer_ui64 = (g_kernel_heap_cursor_ui64 + 4096 - 1) & ~(4096 - 1);
+    g_kernel_heap_cursor_ui64 = l_returned_pointer_ui64 + f_size_ui32;
     return (void *)l_returned_pointer_ui64;
 }
 

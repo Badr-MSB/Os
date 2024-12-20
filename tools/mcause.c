@@ -2,6 +2,7 @@
 #include "csr_registers.h"
 #include "../lib/stdio.h"
 #include "../trap/handler.h"
+#include "../syscon/syscon.h"
 
 void m_display_trap_cause()
 {
@@ -31,7 +32,8 @@ void s_display_trap_cause()
     }
     else
     {
-        printf("Exception: %s\n", cause_to_string[cause_code + 11]);
+        printf("S-mode Exception: %s\n", cause_to_string[cause_code + 11]);
+        poweroff();
     }
 }
 
@@ -52,6 +54,7 @@ void m_trap_handler(){
     }
     else
     {
-        printf("Exception: %s unhandled\n", cause_to_string[(mcause  & ~(1ul<<63)) + 11]);
+        printf("M-mode Exception: %s unhandled\n", cause_to_string[(mcause  & ~(1ul<<63)) + 11]);
+        poweroff();
     }
 }

@@ -7,19 +7,19 @@ KERNEL_IMAGE=kernel.elf
 
 # QEMU
 QEMU=qemu-system-riscv64
-MACH= virt -cpu rv64 -smp 1 -m 2G -serial mon:stdio -nographic
+MACH= virt -cpu rv64 -smp 1 -m 4G -serial mon:stdio -nographic
 RUN=$(QEMU) -device VGA -machine $(MACH) 
 RUN+=-bios none -kernel $(KERNEL_IMAGE) -rtc base=localtime -k fr
 
 # Format
 INDENT_FLAGS=-linux -brf -i2
-# Always run targets : lib & boot 
+# Always run targets : lib, boot, uart & ktest 
 .PHONY: lib
 .PHONY: boot
 .PHONY: uart
 .PHONY: ktest
 
-all: buildfolder uart lib boot syscon pci handler boot main virt_plic mcause mstatus alloc s_trap_handler vga ktest vm
+all: buildfolder uart lib boot syscon pci handler boot main virt_plic mcause mstatus alloc memory_layout s_trap_handler vga ktest vm
 	$(CC) build/*.o $(CFLAGS) -T $(LINKER_SCRIPT) -o $(KERNEL_IMAGE) -Wl,-Map=program.map
 
 buildfolder:
@@ -50,6 +50,9 @@ mstatus: tools/mstatus.h
 
 alloc: tools/alloc.h
 	$(CC) -c tools/alloc.c $(CFLAGS) -o build/alloc.o
+
+memory_layout: tools/memory_layout.h
+	$(CC) -c tools/memory_layout.c $(CFLAGS) -o build/memory_layout.o
 
 handler:
 	$(CC) -c trap/handler.c $(CFLAGS) -o build/handler.o
