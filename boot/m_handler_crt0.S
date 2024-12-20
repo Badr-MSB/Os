@@ -3,13 +3,13 @@
 # solution : force a Sofware Interrupt ^_^
 .globl _m_ct_switch
 _m_ct_switch:
-    call m_display_trap_cause
-    csrr t0, mcause
-    li t1, 0x00000007
-    li t2, (1 << 63)
-    or t1, t1 , t2
-    bne t0 ,t1 , _mret
-    csrc mip, 0x10
+    # call m_display_trap_cause
+    # csrr t0, mcause
+    # li t1, 0x00000007
+    # li t2, (1ul << 63 )
+    # or t1, t1 , t2
+    # bne t0 ,t1 , _mret
+    # csrc mip, 0x10
     
     csrrw sp, mscratch, sp
     
@@ -46,7 +46,8 @@ _m_ct_switch:
     push x30
     push x31
   
-    call timer_handler
+    # call timer_handler
+    call m_trap_handler
     
     pop x31
     pop x30
