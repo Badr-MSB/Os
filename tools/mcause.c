@@ -10,7 +10,7 @@ void m_display_trap_cause()
     printf("mcause = [%lx] ", mcause_value);
 
     uint64_t cause_code = mcause_value & 0x7FFFFFFFFFFFFFFF;
-    if (mcause_value & ( 1ulul << 63) == (1ulul << 63))
+    if (mcause_value & ( 1ul << 63) == (1ul << 63))
     {
         printf("Interrupt: %s\n", cause_to_string[cause_code - 1]);
     }

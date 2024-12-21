@@ -18,12 +18,12 @@ extern char _page_table_start[];
 void kmain()
 {
     //*********** Dump memory ************//
-    uint64_t* memory_start = (uint64_t*)_memory_start;
-    uint64_t* memory_end = (uint64_t*)_memory_end;
+    // uint64_t* memory_start = (uint64_t*)_memory_start;
+    // uint64_t* memory_end = (uint64_t*)_memory_end;
 
-    printf("memory start : %x \n", memory_start);
-    printf("memory end : %x\n", memory_end);
-    printf("memory size : %x\n", memory_end - memory_start);
+    // printf("memory start : %x \n", memory_start);
+    // printf("memory end : %x\n", memory_end);
+    // printf("memory size : %x\n", memory_end - memory_start);
 
     //***********************************//
     uart_init();
@@ -51,7 +51,7 @@ void kmain()
     printf("Setting satp\n");
     satp_setup();
 
-    printf("LOOP");
+    printf("LOOP\n");
     while(1);
     __builtin_unreachable();
 }
