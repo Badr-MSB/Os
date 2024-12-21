@@ -8,7 +8,10 @@
 #include "virtual-memo/paging.h"
 #include "lib/stdio.h"
 
-extern char _data_start[];
+extern char _text_start[];
+extern char _text_end[];
+extern char _bss_start[];
+extern char _data_end[];
 extern char _page_table_start[];
 
 void kmain()
@@ -30,29 +33,16 @@ void kmain()
 
     // UART Port
     map_to_virtual((uintptr_t)0x10000000ULL,(uintptr_t)0x10000000ULL, 0x7);
-    // text 
-    map_to_virtual((uintptr_t)0x80000000ULL,(uintptr_t)0x80000000ULL, 0x5);
-    map_to_virtual((uintptr_t)0x80001000ULL,(uintptr_t)0x80001000ULL, 0x5);
-    map_to_virtual((uintptr_t)0x80002000ULL,(uintptr_t)0x80002000ULL, 0x5);
-    //bss
-    map_to_virtual((uintptr_t)0x80003000ULL,(uintptr_t)0x80003000ULL, 0x7);
-    map_to_virtual((uintptr_t)0x80004000ULL,(uintptr_t)0x80004000ULL, 0x7);
-    
-    // // // rodata & data
-    // map_to_virtual((uintptr_t)0x80200000ULL,(uintptr_t)0x80202000ULL, 0x7);
-    // map_to_virtual((uintptr_t)0x80201000ULL,(uintptr_t)0x80202000ULL, 0x7);
-    // map_to_virtual((uintptr_t)0x80202000ULL,(uintptr_t)0x80202000ULL, 0x7);
-    // map_to_virtual((uintptr_t)0x80203000ULL,(uintptr_t)0x80203000ULL, 0x7);
-    // map_to_virtual((uintptr_t)0x80204000ULL,(uintptr_t)0x80204000ULL, 0x7);
-    // map_to_virtual((uintptr_t)0x80205000ULL,(uintptr_t)0x80205000ULL, 0x7);
-    // map_to_virtual((uintptr_t)0x80206000ULL,(uintptr_t)0x80206000ULL, 0x7);
-    // map_to_virtual((uintptr_t)0x80207000ULL,(uintptr_t)0x80207000ULL, 0x7);
-    // map_to_virtual((uintptr_t)0x80208000ULL,(uintptr_t)0x80208000ULL, 0x7);
-    // map_to_virtual((uintptr_t)0x80209000ULL,(uintptr_t)0x80209000ULL, 0x7);
-    
+
+    map_memory_to_virtual((uintptr_t)_text_start, (uintptr_t)_text_end, (uintptr_t)0x80000000ULL, 0x5);
+    map_memory_to_virtual((uintptr_t)_bss_start, (uintptr_t)_data_end, (uintptr_t)0x80003000ULL, 0x7);
+
     walk_page_tables((uintptr_t)_page_table_start, 2);
+    
     printf("Setting satp\n");
     satp_setup();
+
+    printf("LOOP\n");
 
     while(1);
     __builtin_unreachable();
