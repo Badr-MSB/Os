@@ -10,8 +10,10 @@ extern char _rodata_start[];
 extern char _rodata_end[];
 extern char _data_start[];
 extern char _data_end[];
+
 extern char _heap_start[];
 extern char _heap_end[];
+
 
 void memory_layout(void){
     printf("Memory Layout\n");
