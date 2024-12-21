@@ -9,5 +9,5 @@ typedef uint64_t pte_t;  // A PTE is 64-bits (8 bytes)
 
 void satp_setup();
 void map_to_virtual(uintptr_t pa, uintptr_t va, uint8_t permissions);
-void print_PT();
-void walk_page_tables(uint64_t *root_page_table, int level);
+void walk_page_tables(uintptr_t* root_page_table, int level);
+void map_memory_to_virtual(uintptr_t pa_start, uintptr_t pa_end, uintptr_t va_start, uint8_t perm);

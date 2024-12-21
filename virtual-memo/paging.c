@@ -10,12 +10,8 @@ extern char _page_table_start[];
 void satp_setup(){
     uint64_t satp_value = 0;
     satp_value = (0x8ULL << 60) | ((uintptr_t)_page_table_start >> 12) ;
-    // satp_value = ((uintptr_t)_page_table_start >> 12) ;
-    printf("satp = %p\n", csr_read(satp));
     csr_write(satp, satp_value);
     asm volatile("sfence.vma" ::: "memory");
-    //printf("satp = %p\n", csr_read(satp));
-    // csr_set(sstatus,0x200);
 }
 
 // Helper function to extract the VPN[0], VPN[1], VPN[2] from a virtual address
@@ -29,15 +25,14 @@ void map_to_virtual(uintptr_t pa, uintptr_t va, uint8_t perm) {
     uint64_t vpn0, vpn1, vpn2;
     extract_vpn(va, &vpn0, &vpn1, &vpn2);
 
-    printf("vpn0=%x,vpn1=%x,vpn2=%x\n", vpn0, vpn1, vpn2);
+    // printf("vpn0=%x,vpn1=%x,vpn2=%x\n", vpn0, vpn1, vpn2);
     // Start from the root page table
     pte_t *pte = (pte_t *)_page_table_start;
 
     // Iterate through page table levels (L2 -> L1 -> L0)
     for (int level = 2; level > 0; level--) {
         pte_t entry = pte[vpn2];
-        printf("page tb entry = %p\n", pte);
-
+        // printf("page tb entry = %p\n", pte);
         // Check if the entry is valid
         if (entry & VALID_BIT_MASK) {
             // If valid, move to the next level
@@ -45,10 +40,10 @@ void map_to_virtual(uintptr_t pa, uintptr_t va, uint8_t perm) {
         } else {
             // Allocate a new page table if the entry is not valid
             pte_t *new_page_table = (pte_t *)kmalloc(1 * PAGE_SIZE);
-            printf("new page address : %p\n", new_page_table);
+            // printf("new page address : %p\n", new_page_table);
             entry = (((uintptr_t)new_page_table >> 12) << 10);  // Set PPN
             entry |= VALID_BIT_MASK;  // Set Valid bit
-            printf("entry : %p\n", entry);
+            // printf("entry : %p\n", entry);
             pte[vpn2] = entry;  // Update the PTE
             pte = new_page_table;  // Move to the next level
         }
@@ -64,22 +59,11 @@ void map_to_virtual(uintptr_t pa, uintptr_t va, uint8_t perm) {
     // At the final level (L0), map the physical address to the virtual address
     pte_t final_pte = ((pa >> 12) << 10);  // Extract PPN
     final_pte |= VALID_BIT_MASK | (perm & 0x7) << 1;   // Set Valid bit & RWX
-    // final_pte |= (1 << 4) | (1 << 5);      // Set Accessed (A) and Dirty (D) bits
-    printf("final pte value : %p\n", final_pte);
+    // printf("final pte value : %p\n", final_pte);
     pte[vpn2] = final_pte; 
 }
 
-void print_PT(){
-    pte_t *pte = (pte_t *)_page_table_start;
-    printf("page walking\n");
-    for(int i = 0; i < 512 ; i++){
-        if( pte[i] & VALID_BIT_MASK)
-        printf("%p = %lx\n", pte+i, pte[i]);
-    }
-    printf("\n");
-}
-
-void walk_page_tables(uint64_t *root_page_table, int level) {
+void walk_page_tables(uintptr_t* root_page_table, int level) {
     uint64_t *pte = root_page_table;
 
     for (int i = 0; i < 512; i++) {
@@ -93,5 +77,17 @@ void walk_page_tables(uint64_t *root_page_table, int level) {
                 walk_page_tables((uint64_t *)physical_address, level - 1);
             }
         }
+    }
+}
+
+void map_memory_to_virtual(uintptr_t pa_start, uintptr_t pa_end, uintptr_t va_start, uint8_t perm){
+    uintptr_t pp_add = ( pa_start >> 12 ) << 12;
+    uintptr_t vp_add = ( va_start >> 12 ) << 12;
+    while (pp_add <= pa_end)
+    {
+        // printf("mapping PP=%x to VP=%x\n", pp_add, vp_add);
+        map_to_virtual(pp_add, vp_add, perm);
+        pp_add += PAGE_SIZE;
+        vp_add += PAGE_SIZE;
     }
 }
