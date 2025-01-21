@@ -14,10 +14,12 @@ PHDRS
   text PT_LOAD;
   data PT_LOAD;
   bss PT_LOAD;
+  user PT_LOAD;
 }
 
 SECTIONS
 {
+  /* INCLUDE user_linker.ld */
   . = 0x80000000;
   .text : {
     PROVIDE(_text_start = .);
@@ -49,6 +51,7 @@ SECTIONS
     PROVIDE(_rodata_start = .);
     *(.rodata .rodata.*)
     PROVIDE(_rodata_end = .);
+    
   } >ram AT>ram :text
 
   .data : {
@@ -57,6 +60,15 @@ SECTIONS
     *(.sdata .sdata.*) *(.data .data.*)
     PROVIDE(_data_end = .);
   } >ram AT>ram :data
+
+  . = 0x40000000;
+  .user : {
+      *(.text.init) *(.text .text.*)
+      *(.sbss .sbss.*) *(.bss .bss.*)
+      *(.rodata .rodata.*)
+      *(.sdata .sdata.*) *(.data .data.*)
+      PROVIDE(_user_apps_end = .);
+  } >ram AT>ram :user
 
   PROVIDE(_memory_start = ORIGIN(ram));
   PROVIDE(_memory_end = ORIGIN(ram) + LENGTH(ram));

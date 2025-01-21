@@ -82,7 +82,6 @@ void map_memory_to_virtual(uintptr_t pa_start, uintptr_t pa_end, uintptr_t va_st
     uintptr_t vp_add = ( va_start >> 12 ) << 12;
     while (pp_add <= pa_end)
     {
-        // printf("mapping PP=%x to VP=%x\n", pp_add, vp_add);
         map_to_virtual(pp_add, vp_add, perm);
         pp_add += PAGE_SIZE;
         vp_add += PAGE_SIZE;

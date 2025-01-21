@@ -1,4 +1,10 @@
-# CLINT in Qemu Virt
+This document provides key information for reproducing the operating system.
+
+Note: The memory addresses mentioned are compatible with the QEMU Virt platform. To identify compatible addresses for another platform, it is recommended to analyze the Device Tree Blob (DTB).
+
+# SoC
+
+## CLINT in Qemu Virt
 
 **CLINT**, stand for Core Local interrupt, used for Software and timer interrupts (internal)
 
@@ -13,23 +19,23 @@ For Qemu virt :
 
 the mtime can be read using the pseudo-instruction rdtime.
 
-## Timer Interupt à la RISC-V
+### Timer Interupt à la RISC-V
 
 The machine mode timer interrupt is generated when:
 - mie in mstatus in enabled
 - MTIE in mie is enabled
 - mtime > mtimecmp
 
-N.B : machine timer interrupts connot be delegated to Supervisor mode. To do so, unse sofware interrupts.
+N.B : machine timer interrupts connot be delegated to Supervisor mode. To do so, use sofware interrupts.
 
-## Software Interrupt
+### Software Interrupt
 
 [Comming Soon]
 
-# PLIC
+## PLIC
 **PLIC**, stands for Platform Level Interrupt Controller, is a programmable interrupt controller used for external interrupts. 
 
-## How it works
+### How it works
 When a device is seeking for attention :
 - Source interrupt pending bit (in the **PLIC**) is set to 1.
 - All enable cores, for this particular interrupt, are notified.
@@ -54,3 +60,5 @@ for more informations : https://github.com/riscv/riscv-plic-spec/blob/master/ris
 ## APLIC
 
 [Comming Soon]
+
+# Virtual memory
